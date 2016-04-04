@@ -1,0 +1,345 @@
+DEBUG 2016-01-14 18:14:40,017: 	 Executing command: 'checkusername'
+DEBUG 2016-01-14 18:14:40,018: 	 Found CRAB cache file /afs/cern.ch/user/w/wmcbraye/.crab3
+DEBUG 2016-01-14 18:14:40,044: 	 Checking credentials
+DEBUG 2016-01-14 18:14:40,045: 	 Found proxy file /tmp/x509up_u43961
+DEBUG 2016-01-14 18:14:40,045: 	 Getting proxy life time left
+DEBUG 2016-01-14 18:14:40,754: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u43961 -timeleft
+ output : 42854
+
+ error: 
+ retcode : 0
+DEBUG 2016-01-14 18:14:41,364: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u43961 -actimeleft
+ output : 42853
+
+ error: 
+ retcode : 0
+DEBUG 2016-01-14 18:14:41,365: 	 Proxy valid for 11:54:14 hours
+DEBUG 2016-01-14 18:14:41,476: 	 Executing : 
+ command : openssl x509 -in ~/.globus/usercert.pem -subject -noout
+ output : subject= /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=wmcbraye/CN=744331/CN=William Jacob Mcbrayer
+
+ error: WARNING: can't open config file: /build/dmwmbld/srv/state/dmwmbld/builds/comp_gcc481/w/tmp/BUILDROOT/ef35842be28ecca6d10195ea8182a5ac/build/dmwmbld/srv/state/dmwmbld/builds/comp_gcc481/w/slc6_amd64_gcc481/external/openssl/1.0.1p/ssl/openssl.cnf
+
+ retcode : 0
+DEBUG 2016-01-14 18:14:41,476: 	 Checking credentials
+DEBUG 2016-01-14 18:14:41,477: 	 Found proxy file /tmp/x509up_u43961
+DEBUG 2016-01-14 18:14:41,477: 	 Getting proxy life time left
+DEBUG 2016-01-14 18:14:41,981: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u43961 -timeleft
+ output : 42853
+
+ error: 
+ retcode : 0
+DEBUG 2016-01-14 18:14:42,486: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u43961 -actimeleft
+ output : 42852
+
+ error: 
+ retcode : 0
+DEBUG 2016-01-14 18:14:42,486: 	 Proxy valid for 11:54:13 hours
+DEBUG 2016-01-14 18:14:42,487: 	 Command use: checkusername
+DEBUG 2016-01-14 18:14:42,487: 	 Options use: []
+DEBUG 2016-01-14 18:14:42,487: 	 Instance is None
+DEBUG 2016-01-14 18:14:42,487: 	 Server base url is None
+INFO 2016-01-14 18:14:42,487: 	 Retrieving DN from proxy...
+INFO 2016-01-14 18:14:43,871: 	 DN is: /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=wmcbraye/CN=744331/CN=William Jacob Mcbrayer
+INFO 2016-01-14 18:14:43,872: 	 Retrieving username from SiteDB...
+INFO 2016-01-14 18:14:45,914: 	 Username is: wmcbraye
+DEBUG 2016-01-14 18:41:11,599: 	 Executing command: 'checkwrite'
+DEBUG 2016-01-14 18:41:11,599: 	 Found CRAB cache file /afs/cern.ch/user/w/wmcbraye/.crab3
+ERROR 2016-01-14 18:41:11,600: 	 Error: Please specify the site where to check the write permissions. Use the --site option.
+ERROR 2016-01-14 18:41:11,600: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/bin/crab", line 159, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/bin/crab", line 145, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/lib/python2.6/site-packages/CRABClient/Commands/checkwrite.py", line 22, in __init__
+    SubCommand.__init__(self, logger, cmdargs)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 254, in __init__
+    self.validateOptions()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/lib/python2.6/site-packages/CRABClient/Commands/checkwrite.py", line 250, in validateOptions
+    raise ex
+MissingOptionException: [91mError[0m: Please specify the site where to check the write permissions. Use the --site option.
+DEBUG 2016-01-14 18:41:30,614: 	 Executing command: 'checkwrite'
+DEBUG 2016-01-14 18:41:30,617: 	 Found CRAB cache file /afs/cern.ch/user/w/wmcbraye/.crab3
+WARNING 2016-01-14 18:41:30,617: 	 Warning: 'crab checkwrite' command takes no arguments, 1 given. Ignoring arguments ['T2_US_MIT'].
+ERROR 2016-01-14 18:41:30,617: 	 Error: Please specify the site where to check the write permissions. Use the --site option.
+ERROR 2016-01-14 18:41:30,618: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/bin/crab", line 159, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/bin/crab", line 145, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/lib/python2.6/site-packages/CRABClient/Commands/checkwrite.py", line 22, in __init__
+    SubCommand.__init__(self, logger, cmdargs)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 254, in __init__
+    self.validateOptions()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/lib/python2.6/site-packages/CRABClient/Commands/checkwrite.py", line 250, in validateOptions
+    raise ex
+MissingOptionException: [91mError[0m: Please specify the site where to check the write permissions. Use the --site option.
+DEBUG 2016-01-14 18:41:51,560: 	 Executing command: 'checkwrite'
+DEBUG 2016-01-14 18:41:51,560: 	 Found CRAB cache file /afs/cern.ch/user/w/wmcbraye/.crab3
+WARNING 2016-01-14 18:41:51,561: 	 Warning: 'crab checkwrite' command takes no arguments, 1 given. Ignoring arguments ['T2_US_MIT'].
+ERROR 2016-01-14 18:41:51,561: 	 Error: Please specify the site where to check the write permissions. Use the --site option.
+ERROR 2016-01-14 18:41:51,561: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/bin/crab", line 159, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/bin/crab", line 145, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/lib/python2.6/site-packages/CRABClient/Commands/checkwrite.py", line 22, in __init__
+    SubCommand.__init__(self, logger, cmdargs)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 254, in __init__
+    self.validateOptions()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/lib/python2.6/site-packages/CRABClient/Commands/checkwrite.py", line 250, in validateOptions
+    raise ex
+MissingOptionException: [91mError[0m: Please specify the site where to check the write permissions. Use the --site option.
+DEBUG 2016-01-14 18:42:48,127: 	 Executing command: 'checkwrite'
+DEBUG 2016-01-14 18:42:48,128: 	 Found CRAB cache file /afs/cern.ch/user/w/wmcbraye/.crab3
+ERROR 2016-01-14 18:42:48,128: 	 Error: Please specify the site where to check the write permissions. Use the --site option.
+ERROR 2016-01-14 18:42:48,131: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/bin/crab", line 159, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/bin/crab", line 145, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/lib/python2.6/site-packages/CRABClient/Commands/checkwrite.py", line 22, in __init__
+    SubCommand.__init__(self, logger, cmdargs)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 254, in __init__
+    self.validateOptions()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/lib/python2.6/site-packages/CRABClient/Commands/checkwrite.py", line 250, in validateOptions
+    raise ex
+MissingOptionException: Error: Please specify the site where to check the write permissions. Use the --site option.
+DEBUG 2016-01-14 18:42:54,978: 	 Executing command: 'checkwrite'
+DEBUG 2016-01-14 18:42:54,978: 	 Found CRAB cache file /afs/cern.ch/user/w/wmcbraye/.crab3
+WARNING 2016-01-14 18:42:54,979: 	 Warning: 'crab checkwrite' command takes no arguments, 1 given. Ignoring arguments ['T2_US_MIT'].
+ERROR 2016-01-14 18:42:54,979: 	 Error: Please specify the site where to check the write permissions. Use the --site option.
+ERROR 2016-01-14 18:42:54,979: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/bin/crab", line 159, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/bin/crab", line 145, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/lib/python2.6/site-packages/CRABClient/Commands/checkwrite.py", line 22, in __init__
+    SubCommand.__init__(self, logger, cmdargs)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 254, in __init__
+    self.validateOptions()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/lib/python2.6/site-packages/CRABClient/Commands/checkwrite.py", line 250, in validateOptions
+    raise ex
+MissingOptionException: [91mError[0m: Please specify the site where to check the write permissions. Use the --site option.
+DEBUG 2016-01-14 18:43:09,929: 	 Executing command: 'checkwrite'
+DEBUG 2016-01-14 18:43:09,929: 	 Found CRAB cache file /afs/cern.ch/user/w/wmcbraye/.crab3
+DEBUG 2016-01-14 18:43:15,434: 	 Executing command: 'checkwrite'
+DEBUG 2016-01-14 18:43:15,434: 	 Found CRAB cache file /afs/cern.ch/user/w/wmcbraye/.crab3
+DEBUG 2016-01-14 18:43:31,056: 	 Executing command: 'checkwrite'
+DEBUG 2016-01-14 18:43:31,056: 	 Found CRAB cache file /afs/cern.ch/user/w/wmcbraye/.crab3
+DEBUG 2016-01-14 18:43:31,069: 	 Checking credentials
+DEBUG 2016-01-14 18:43:31,070: 	 Found proxy file /tmp/x509up_u43961
+DEBUG 2016-01-14 18:43:31,070: 	 Getting proxy life time left
+DEBUG 2016-01-14 18:43:31,783: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u43961 -timeleft
+ output : 41986
+
+ error: 
+ retcode : 0
+DEBUG 2016-01-14 18:43:32,292: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u43961 -actimeleft
+ output : 41985
+
+ error: 
+ retcode : 0
+DEBUG 2016-01-14 18:43:32,292: 	 Proxy valid for 11:39:46 hours
+DEBUG 2016-01-14 18:43:32,406: 	 Executing : 
+ command : openssl x509 -in ~/.globus/usercert.pem -subject -noout
+ output : subject= /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=wmcbraye/CN=744331/CN=William Jacob Mcbrayer
+
+ error: WARNING: can't open config file: /build/dmwmbld/srv/state/dmwmbld/builds/comp_gcc481/w/tmp/BUILDROOT/ef35842be28ecca6d10195ea8182a5ac/build/dmwmbld/srv/state/dmwmbld/builds/comp_gcc481/w/slc6_amd64_gcc481/external/openssl/1.0.1p/ssl/openssl.cnf
+
+ retcode : 0
+DEBUG 2016-01-14 18:43:32,406: 	 Checking credentials
+DEBUG 2016-01-14 18:43:32,406: 	 Found proxy file /tmp/x509up_u43961
+DEBUG 2016-01-14 18:43:32,406: 	 Getting proxy life time left
+DEBUG 2016-01-14 18:43:32,915: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u43961 -timeleft
+ output : 41985
+
+ error: 
+ retcode : 0
+DEBUG 2016-01-14 18:43:33,421: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u43961 -actimeleft
+ output : 41984
+
+ error: 
+ retcode : 0
+DEBUG 2016-01-14 18:43:33,421: 	 Proxy valid for 11:39:45 hours
+DEBUG 2016-01-14 18:43:33,932: 	 Executing : 
+ command : env X509_USER_PROXY=/tmp/x509up_u43961 voms-proxy-info -fqan
+ output : /cms/Role=NULL/Capability=NULL
+/cms/uscms/Role=NULL/Capability=NULL
+
+ error: 
+ retcode : 0
+DEBUG 2016-01-14 18:43:33,933: 	 Command use: checkwrite
+DEBUG 2016-01-14 18:43:33,933: 	 Options use: ['--site', 'T2_US_MIT']
+DEBUG 2016-01-14 18:43:33,933: 	 Instance is None
+DEBUG 2016-01-14 18:43:33,933: 	 Server base url is None
+DEBUG 2016-01-14 18:43:33,969: 	 Service initialised ({'endpoint': 'https://cmsweb.cern.ch/phedex/datasvc/json/prod/', 'key': '/tmp/x509up_u43961', 'maxcachereuse': 24.0, 'cachepath': '/tmp/wmcbraye/.wmcore_cache_Pkn0Tv/cmsweb.cern.ch', 'inputdata': {}, 'cert': '/tmp/x509up_u43961', 'timeout': 300, 'service_name': 'PhEDEx', 'requests': {'endpoint': 'https://cmsweb.cern.ch/phedex/datasvc/json/prod/', 'key': '/tmp/x509up_u43961', 'req_cache_path': '/tmp/wmcbraye/.wmcore_cache_Pkn0Tv/cmsweb.cern.ch/.cache', 'cachepath': '/tmp/wmcbraye/.wmcore_cache_Pkn0Tv/cmsweb.cern.ch', 'host': 'https://cmsweb.cern.ch/phedex/datasvc/json/prod/', 'cacheduration': 0, 'cert': '/tmp/x509up_u43961', 'accept_type': 'text/html', 'timeout': 300, 'deleteCacheOnExit': <WMCore.Services.Requests.TempDirectory instance at 0x2038170>, 'endpoint_components': ParseResult(scheme='https', netloc='cmsweb.cern.ch', path='/phedex/datasvc/json/prod/', params='', query='', fragment=''), 'logger': <logging.Logger instance at 0x20354d0>, 'content_type': 'application/x-www-form-urlencoded', 'conn': <httplib2.Http object at 0x2037190>}, 'logger': <logging.Logger instance at 0x20354d0>, 'cacheduration': 0, 'method': None}):
+	 host: cmsweb.cern.ch, basepath: https://cmsweb.cern.ch/phedex/datasvc/json/prod/ (text/html)
+	 cache: /tmp/wmcbraye/.wmcore_cache_Pkn0Tv/cmsweb.cern.ch (duration 0 hours, max reuse 24.0 hours)
+INFO 2016-01-14 18:43:33,969: 	 Will check write permission in the default location /store/user/<username>
+INFO 2016-01-14 18:43:33,969: 	 Retrieving DN from proxy...
+INFO 2016-01-14 18:43:35,924: 	 DN is: /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=wmcbraye/CN=744331/CN=William Jacob Mcbrayer
+INFO 2016-01-14 18:43:35,924: 	 Retrieving username from SiteDB...
+INFO 2016-01-14 18:43:38,330: 	 Username is: wmcbraye
+INFO 2016-01-14 18:43:38,331: 	 Validating LFN /store/user/wmcbraye...
+INFO 2016-01-14 18:43:38,331: 	 LFN /store/user/wmcbraye is valid.
+INFO 2016-01-14 18:43:38,365: 	 Will use `gfal-copy`, `gfal-rm` commands for checking write permissions
+INFO 2016-01-14 18:43:38,365: 	 Will check write permission in /store/user/wmcbraye on site T2_US_MIT
+DEBUG 2016-01-14 18:43:38,400: 	 getData: 
+	url: lfn2pfn
+	data: {'node': ['T2_US_MIT'], 'custodial': 'n', 'lfn': ['/store/user/wmcbraye/crab3checkwrite_20160114_184338/crab3checkwrite_20160114_184338.tmp'], 'protocol': 'srmv2'}
+INFO 2016-01-14 18:43:39,026: 	 
+Attempting to create (dummy) directory crab3checkwrite_20160114_184338 and copy (dummy) file crab3checkwrite_20160114_184338.tmp to /store/user/wmcbraye
+
+INFO 2016-01-14 18:43:39,032: 	 Executing command: env -i X509_USER_PROXY=/tmp/x509up_u43961 gfal-copy -p -v -t 180 -K ADLER32 file:///afs/cern.ch/work/w/wmcbraye/private/CMSSW_7_5_7_patch1/src/crab/crab3checkwrite_20160114_184338.tmp 'srm://se01.cmsaf.mit.edu:8443/srm/v2/server?SFN=/mnt/hadoop/cms/store/user/wmcbraye/crab3checkwrite_20160114_184338/crab3checkwrite_20160114_184338.tmp'
+INFO 2016-01-14 18:43:39,032: 	 Please wait...
+INFO 2016-01-14 18:43:43,935: 	 Failed running copy command
+INFO 2016-01-14 18:43:43,936: 	   Stdout:
+    Copying 85 bytes file:///afs/cern.ch/work/w/wmcbraye/private/CMSSW_7_5_7_patch1/src/crab/crab3checkwrite_20160114_184338.tmp => srm://se01.cmsaf.mit.edu:8443/srm/v2/server?SFN=/mnt/hadoop/cms/store/user/wmcbraye/crab3checkwrite_20160114_184338/crab3checkwrite_20160114_184338.tmp
+    event: [1452793420893] BOTH   GFAL2:CORE:COPY	LIST:ENTER	
+    event: [1452793420893] BOTH   GFAL2:CORE:COPY	LIST:ITEM	file:///afs/cern.ch/work/w/wmcbraye/private/CMSSW_7_5_7_patch1/src/crab/crab3checkwrite_20160114_184338.tmp => srm://se01.cmsaf.mit.edu:8443/srm/v2/server?SFN=/mnt/hadoop/cms/store/user/wmcbraye/crab3checkwrite_20160114_184338/crab3checkwrite_20160114_184338.tmp
+    event: [1452793420893] BOTH   GFAL2:CORE:COPY	LIST:EXIT	
+    event: [1452793421320] BOTH   SRM	PREPARE:ENTER	
+    event: [1452793421320] SOURCE SRM	CHECKSUM:ENTER	
+    event: [1452793421320] SOURCE SRM	CHECKSUM:EXIT	
+    
+INFO 2016-01-14 18:43:43,936: 	   Stderr:
+    WARNING Transfer failed with: DESTINATION MAKE_PARENT srm-ifce err: Input/output error, err: [SE][Mkdir][SRM_FAILURE] httpg://se01.cmsaf.mit.edu:8443/srm/v2/server: srm://se01.cmsaf.mit.edu:8443/srm/v2/server?SFN=/mnt/hadoop/cms/store/user/wmcbraye/crab3checkwrite_20160114_184338: Error:/bin/mkdir: cannot create directory `/mnt/hadoop/cms/store/user/wmcbraye/crab3checkwrite_20160114_184338': Permission denied
+    Ref-u cmsu1744  /bin/mkdir /mnt/hadoop/cms/store/user/wmcbraye/crab3checkwrite_20160114_184338
+    
+    gfal-copy error: 5 (Input/output error) - DESTINATION MAKE_PARENT srm-ifce err: Input/output error, err: [SE][Mkdir][SRM_FAILURE] httpg://se01.cmsaf.mit.edu:8443/srm/v2/server: srm://se01.cmsaf.mit.edu:8443/srm/v2/server?SFN=/mnt/hadoop/cms/store/user/wmcbraye/crab3checkwrite_20160114_184338: Error:/bin/mkdir: cannot create directory `/mnt/hadoop/cms/store/user/wmcbraye/crab3checkwrite_20160114_184338': Permission denied
+    Ref-u cmsu1744  /bin/mkdir /mnt/hadoop/cms/store/user/wmcbraye/crab3checkwrite_20160114_184338
+    
+    
+INFO 2016-01-14 18:43:44,169: 	 
+Checkwrite Result:
+INFO 2016-01-14 18:43:44,170: 	 Error: Unable to write in /store/user/wmcbraye on site T2_US_MIT
+       You may want to contact the site administrators sending them the 'crab checkwrite' output as printed above.
+INFO 2016-01-14 18:43:44,170: 	 Note: You cannot write to a site if you did not ask permission.
+DEBUG 2016-01-14 18:45:09,823: 	 Executing command: 'checkwrite'
+DEBUG 2016-01-14 18:45:09,824: 	 Found CRAB cache file /afs/cern.ch/user/w/wmcbraye/.crab3
+WARNING 2016-01-14 18:45:09,825: 	 Warning: 'crab checkwrite' command takes no arguments, 1 given. Ignoring arguments ['site'].
+ERROR 2016-01-14 18:45:09,825: 	 Error: Please specify the site where to check the write permissions. Use the --site option.
+ERROR 2016-01-14 18:45:09,825: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/bin/crab", line 159, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/bin/crab", line 145, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/lib/python2.6/site-packages/CRABClient/Commands/checkwrite.py", line 22, in __init__
+    SubCommand.__init__(self, logger, cmdargs)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/lib/python2.6/site-packages/CRABClient/Commands/SubCommand.py", line 254, in __init__
+    self.validateOptions()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc481/cms/crabclient/3.3.1512/lib/python2.6/site-packages/CRABClient/Commands/checkwrite.py", line 250, in validateOptions
+    raise ex
+MissingOptionException: [91mError[0m: Please specify the site where to check the write permissions. Use the --site option.
+DEBUG 2016-01-14 18:45:17,378: 	 Executing command: 'checkwrite'
+DEBUG 2016-01-14 18:45:17,378: 	 Found CRAB cache file /afs/cern.ch/user/w/wmcbraye/.crab3
+DEBUG 2016-01-14 18:45:24,082: 	 Executing command: 'checkwrite'
+DEBUG 2016-01-14 18:45:24,082: 	 Found CRAB cache file /afs/cern.ch/user/w/wmcbraye/.crab3
+DEBUG 2016-01-14 18:45:24,100: 	 Checking credentials
+DEBUG 2016-01-14 18:45:24,105: 	 Found proxy file /tmp/x509up_u43961
+DEBUG 2016-01-14 18:45:24,105: 	 Getting proxy life time left
+DEBUG 2016-01-14 18:45:24,921: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u43961 -timeleft
+ output : 41873
+
+ error: 
+ retcode : 0
+DEBUG 2016-01-14 18:45:25,437: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u43961 -actimeleft
+ output : 41872
+
+ error: 
+ retcode : 0
+DEBUG 2016-01-14 18:45:25,437: 	 Proxy valid for 11:37:53 hours
+DEBUG 2016-01-14 18:45:25,551: 	 Executing : 
+ command : openssl x509 -in ~/.globus/usercert.pem -subject -noout
+ output : subject= /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=wmcbraye/CN=744331/CN=William Jacob Mcbrayer
+
+ error: WARNING: can't open config file: /build/dmwmbld/srv/state/dmwmbld/builds/comp_gcc481/w/tmp/BUILDROOT/ef35842be28ecca6d10195ea8182a5ac/build/dmwmbld/srv/state/dmwmbld/builds/comp_gcc481/w/slc6_amd64_gcc481/external/openssl/1.0.1p/ssl/openssl.cnf
+
+ retcode : 0
+DEBUG 2016-01-14 18:45:25,551: 	 Checking credentials
+DEBUG 2016-01-14 18:45:25,551: 	 Found proxy file /tmp/x509up_u43961
+DEBUG 2016-01-14 18:45:25,551: 	 Getting proxy life time left
+DEBUG 2016-01-14 18:45:26,056: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u43961 -timeleft
+ output : 41871
+
+ error: 
+ retcode : 0
+DEBUG 2016-01-14 18:45:26,563: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u43961 -actimeleft
+ output : 41871
+
+ error: 
+ retcode : 0
+DEBUG 2016-01-14 18:45:26,563: 	 Proxy valid for 11:37:51 hours
+DEBUG 2016-01-14 18:45:27,175: 	 Executing : 
+ command : env X509_USER_PROXY=/tmp/x509up_u43961 voms-proxy-info -fqan
+ output : /cms/Role=NULL/Capability=NULL
+/cms/uscms/Role=NULL/Capability=NULL
+
+ error: 
+ retcode : 0
+DEBUG 2016-01-14 18:45:27,175: 	 Command use: checkwrite
+DEBUG 2016-01-14 18:45:27,175: 	 Options use: ['--site', 'T2_US_MIT']
+DEBUG 2016-01-14 18:45:27,175: 	 Instance is None
+DEBUG 2016-01-14 18:45:27,175: 	 Server base url is None
+DEBUG 2016-01-14 18:45:27,228: 	 Service initialised ({'endpoint': 'https://cmsweb.cern.ch/phedex/datasvc/json/prod/', 'key': '/tmp/x509up_u43961', 'maxcachereuse': 24.0, 'cachepath': '/tmp/wmcbraye/.wmcore_cache_aVuVd8/cmsweb.cern.ch', 'inputdata': {}, 'cert': '/tmp/x509up_u43961', 'timeout': 300, 'service_name': 'PhEDEx', 'requests': {'endpoint': 'https://cmsweb.cern.ch/phedex/datasvc/json/prod/', 'key': '/tmp/x509up_u43961', 'req_cache_path': '/tmp/wmcbraye/.wmcore_cache_aVuVd8/cmsweb.cern.ch/.cache', 'cachepath': '/tmp/wmcbraye/.wmcore_cache_aVuVd8/cmsweb.cern.ch', 'host': 'https://cmsweb.cern.ch/phedex/datasvc/json/prod/', 'cacheduration': 0, 'cert': '/tmp/x509up_u43961', 'accept_type': 'text/html', 'timeout': 300, 'deleteCacheOnExit': <WMCore.Services.Requests.TempDirectory instance at 0xdf8170>, 'endpoint_components': ParseResult(scheme='https', netloc='cmsweb.cern.ch', path='/phedex/datasvc/json/prod/', params='', query='', fragment=''), 'logger': <logging.Logger instance at 0xdf54d0>, 'content_type': 'application/x-www-form-urlencoded', 'conn': <httplib2.Http object at 0xdf7190>}, 'logger': <logging.Logger instance at 0xdf54d0>, 'cacheduration': 0, 'method': None}):
+	 host: cmsweb.cern.ch, basepath: https://cmsweb.cern.ch/phedex/datasvc/json/prod/ (text/html)
+	 cache: /tmp/wmcbraye/.wmcore_cache_aVuVd8/cmsweb.cern.ch (duration 0 hours, max reuse 24.0 hours)
+INFO 2016-01-14 18:45:27,229: 	 Will check write permission in the default location /store/user/<username>
+INFO 2016-01-14 18:45:27,229: 	 Retrieving DN from proxy...
+INFO 2016-01-14 18:45:28,540: 	 DN is: /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=wmcbraye/CN=744331/CN=William Jacob Mcbrayer
+INFO 2016-01-14 18:45:28,540: 	 Retrieving username from SiteDB...
+INFO 2016-01-14 18:45:30,872: 	 Username is: wmcbraye
+INFO 2016-01-14 18:45:30,873: 	 Validating LFN /store/user/wmcbraye...
+INFO 2016-01-14 18:45:30,873: 	 LFN /store/user/wmcbraye is valid.
+INFO 2016-01-14 18:45:30,915: 	 Will use `gfal-copy`, `gfal-rm` commands for checking write permissions
+INFO 2016-01-14 18:45:30,915: 	 Will check write permission in /store/user/wmcbraye on site T2_US_MIT
+DEBUG 2016-01-14 18:45:30,918: 	 getData: 
+	url: lfn2pfn
+	data: {'node': ['T2_US_MIT'], 'custodial': 'n', 'lfn': ['/store/user/wmcbraye/crab3checkwrite_20160114_184530/crab3checkwrite_20160114_184530.tmp'], 'protocol': 'srmv2'}
+INFO 2016-01-14 18:45:31,442: 	 
+Attempting to create (dummy) directory crab3checkwrite_20160114_184530 and copy (dummy) file crab3checkwrite_20160114_184530.tmp to /store/user/wmcbraye
+
+INFO 2016-01-14 18:45:31,448: 	 Executing command: env -i X509_USER_PROXY=/tmp/x509up_u43961 gfal-copy -p -v -t 180 -K ADLER32 file:///afs/cern.ch/work/w/wmcbraye/private/CMSSW_7_5_7_patch1/src/crab/crab3checkwrite_20160114_184530.tmp 'srm://se01.cmsaf.mit.edu:8443/srm/v2/server?SFN=/mnt/hadoop/cms/store/user/wmcbraye/crab3checkwrite_20160114_184530/crab3checkwrite_20160114_184530.tmp'
+INFO 2016-01-14 18:45:31,448: 	 Please wait...
+INFO 2016-01-14 18:45:35,370: 	 Failed running copy command
+INFO 2016-01-14 18:45:35,371: 	   Stdout:
+    Copying 85 bytes file:///afs/cern.ch/work/w/wmcbraye/private/CMSSW_7_5_7_patch1/src/crab/crab3checkwrite_20160114_184530.tmp => srm://se01.cmsaf.mit.edu:8443/srm/v2/server?SFN=/mnt/hadoop/cms/store/user/wmcbraye/crab3checkwrite_20160114_184530/crab3checkwrite_20160114_184530.tmp
+    event: [1452793534330] BOTH   GFAL2:CORE:COPY	LIST:ENTER	
+    event: [1452793534330] BOTH   GFAL2:CORE:COPY	LIST:ITEM	file:///afs/cern.ch/work/w/wmcbraye/private/CMSSW_7_5_7_patch1/src/crab/crab3checkwrite_20160114_184530.tmp => srm://se01.cmsaf.mit.edu:8443/srm/v2/server?SFN=/mnt/hadoop/cms/store/user/wmcbraye/crab3checkwrite_20160114_184530/crab3checkwrite_20160114_184530.tmp
+    event: [1452793534330] BOTH   GFAL2:CORE:COPY	LIST:EXIT	
+    event: [1452793534657] BOTH   SRM	PREPARE:ENTER	
+    event: [1452793534657] SOURCE SRM	CHECKSUM:ENTER	
+    event: [1452793534657] SOURCE SRM	CHECKSUM:EXIT	
+    
+INFO 2016-01-14 18:45:35,372: 	   Stderr:
+    WARNING Transfer failed with: DESTINATION MAKE_PARENT srm-ifce err: Input/output error, err: [SE][Mkdir][SRM_FAILURE] httpg://se01.cmsaf.mit.edu:8443/srm/v2/server: srm://se01.cmsaf.mit.edu:8443/srm/v2/server?SFN=/mnt/hadoop/cms/store/user/wmcbraye/crab3checkwrite_20160114_184530: Error:/bin/mkdir: cannot create directory `/mnt/hadoop/cms/store/user/wmcbraye/crab3checkwrite_20160114_184530': Permission denied
+    Ref-u cmsu1744  /bin/mkdir /mnt/hadoop/cms/store/user/wmcbraye/crab3checkwrite_20160114_184530
+    
+    gfal-copy error: 5 (Input/output error) - DESTINATION MAKE_PARENT srm-ifce err: Input/output error, err: [SE][Mkdir][SRM_FAILURE] httpg://se01.cmsaf.mit.edu:8443/srm/v2/server: srm://se01.cmsaf.mit.edu:8443/srm/v2/server?SFN=/mnt/hadoop/cms/store/user/wmcbraye/crab3checkwrite_20160114_184530: Error:/bin/mkdir: cannot create directory `/mnt/hadoop/cms/store/user/wmcbraye/crab3checkwrite_20160114_184530': Permission denied
+    Ref-u cmsu1744  /bin/mkdir /mnt/hadoop/cms/store/user/wmcbraye/crab3checkwrite_20160114_184530
+    
+    
+INFO 2016-01-14 18:45:50,390: 	 
+Checkwrite Result:
+INFO 2016-01-14 18:45:50,390: 	 Error: Unable to write in /store/user/wmcbraye on site T2_US_MIT
+       You may want to contact the site administrators sending them the 'crab checkwrite' output as printed above.
+INFO 2016-01-14 18:45:50,390: 	 Note: You cannot write to a site if you did not ask permission.
