@@ -18,6 +18,9 @@ plot_style.C initializes the histograms (MakeHists) and sets all of the graphics
 ReadZDCTree.C contains functions which gets leafs from trees (GetLeafs) and then fills the histograms with calibrated ZDC digis. 
 
 In order to add a new plot, 
+
   (1) Declare it in ReadZDCTree.C
+  
   (2) Initialize and set graphing options in plot_style.C
-  (3) Create and canvas and draw in make_plots.C
+  
+  (3) Create a canvas and draw in make_plots.C
