@@ -1,6 +1,6 @@
 // ReadZDCTree.C
 //
-// Contains the functions neccessary to calibrate the ZDC digis
+// Fills histograms with ZDC digis event by event
 
 # include "TCanvas.h"
 # include "TFile.h"
@@ -882,4 +882,3 @@ void ReadZDCTree(int ievent)
     hZDCpSum_vs_TS_Nsub->Fill(ETpsum_Nsubbed);
     hZDCnSum_vs_TS_Nsub->Fill(ETnsum_Nsubbed);
 }
-

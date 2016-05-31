@@ -6,18 +6,27 @@
  
  Description: Plotting macro for the CMS Zero Degree Calorimeter (ZDC)
  
- Implementation:
- <Notes of implementation>
+ Note on running:
+    The structure of this code is as follows: make_plots.C accessess the root 
+ file choice in which the ZDC digis are stored.
+    Calibration of channels is done event by event in ReadZDCTree.C. Edit this 
+ for changes of channel gains or switching of timeslices/ZDC channels. 
+    Histograms and declared and their plotting options set in plot_style.C. 
+ The bin sizes, axis limits, and other settings are adjusted here. If a new 
+ histogram not already being made is needed, it must first be initialized in 
+ ReadZDCTree.C and then then declared in plot_style.C. 
+    The histograms are stored into a new, much smaller .root file for quick 
+ access called ZDC_plots.root. Lastly, all canvas options are set and drawn in
+ make_plots.C.
  
  */
 //
 // Original Author:  Will McBrayer
-//
+// Date:  31st May, 2016
 //
 
 # include "ReadZDCTree.C"
 # include "plot_style.C"
-# include "TCanvas.h"
 
 using namespace std;
 
@@ -42,7 +51,7 @@ void make_plots() {
     ZDCDigiTree = (TTree *) fin->Get("ZDCDigiTree");
     BeamTree = (TTree *) fin->Get("BeamTree");
     
-    tfout = new TFile("ZDC_plots.root","recreate");
+    tfout = new TFile("results/ZDC_plots.root","recreate");
     tfout->cd();
 
     MakeHists();
@@ -220,7 +229,7 @@ void make_plots() {
     hZDCpSum_vs_cent_Nsub->ProfileX()->Draw("same");
     txSignalTS->Draw("same");
     txNoiseTS->Draw("same");
-    if (print_plots) cZDCp_signal_vs_cent->Print("ZDCp_signal_vs_cent.pdf","pdf");
+    if (print_plots) cZDCp_signal_vs_cent->Print("results/ZDCp_signal_vs_cent.pdf","pdf");
     if (close_plots) cZDCp_signal_vs_cent->Close();
     
     
@@ -233,7 +242,7 @@ void make_plots() {
     hZDCpSum_vs_noff_Nsub->ProfileX()->Draw("same");
     txSignalTS->Draw("same");
     txNoiseTS->Draw("same");
-    if (print_plots) cZDCp_signal_vs_noff->Print("ZDCp_signal_vs_noff.pdf","pdf");
+    if (print_plots) cZDCp_signal_vs_noff->Print("results/ZDCp_signal_vs_noff.pdf","pdf");
     if (close_plots) cZDCp_signal_vs_noff->Close();
     
     
@@ -244,7 +253,7 @@ void make_plots() {
     cZDCpEM_vs_tot->cd();
     hZDCpEM_vs_tot->Draw("same");
     txSignalTS->Draw("same");
-    if (print_plots) cZDCpEM_vs_tot->Print("cZDCpEM_vs_tot.pdf","pdf");
+    if (print_plots) cZDCpEM_vs_tot->Print("results/ZDCpEM_vs_tot.pdf","pdf");
     if (close_plots) cZDCpEM_vs_tot->Close();
     
     TCanvas * cZDCpEM_vs_tot_Nsub = new TCanvas("cZDCpEM_vs_tot_Nsub","cZDCpEM_vs_tot_Nsub",700,650);
@@ -254,7 +263,7 @@ void make_plots() {
     hZDCpEM_vs_tot_Nsub->Draw("same");
     txSignalTS->Draw("same");
     txNoiseTS->Draw("same");
-    if (print_plots) cZDCpEM_vs_tot_Nsub->Print("cZDCpEM_vs_tot_Nsub.pdf","pdf");
+    if (print_plots) cZDCpEM_vs_tot_Nsub->Print("results/ZDCpEM_vs_tot_Nsub.pdf","pdf");
     if (close_plots) cZDCpEM_vs_tot_Nsub->Close();
     
     
@@ -304,7 +313,7 @@ void make_plots() {
     padPosChannel_Scan_cent[9]->SetTopMargin(0.2);
     txSignalTS->Draw("same");
     txNoiseTS->Draw("same");
-    if (print_plots) cPosChannel_Scan_cent->Print("PosChannel_Scan_cent.pdf","pdf");
+    if (print_plots) cPosChannel_Scan_cent->Print("results/PosChannel_Scan_cent.pdf","pdf");
     if (close_plots) cPosChannel_Scan_cent->Close();
     
     
@@ -315,7 +324,6 @@ void make_plots() {
         padPosChannel_Scan_noff[EMchan-1] = (TPad*) cPosChannel_Scan_noff->cd(EMchan);
         padPosChannel_Scan_noff[EMchan-1]->SetTopMargin(0.05);
         hPXpEMchan_noff[EMchan-1]->Draw("same");
-        //        txZDCpchan[EMchan-1]->AddText(Form("ZDC+ EM%d",EMchan));
         txZDCpchan[EMchan-1]->Draw("same");
     }
     hPXpEMchan_noff[0]->GetYaxis()->SetTitleOffset(1.35);
@@ -325,28 +333,22 @@ void make_plots() {
     padPosChannel_Scan_noff[4]->SetBottomMargin(0.01);
     padPosChannel_Scan_noff[5] = (TPad*) cPosChannel_Scan_noff->cd(6);
     hPXpHADchan_noff[0]->Draw("same");
-    //    txZDCpchan[5]->AddText("ZDC+ HAD1");
     txZDCpchan[5]->Draw("same");
     padPosChannel_Scan_noff[6] = (TPad*) cPosChannel_Scan_noff->cd(7);
     hPXpHADchan_noff[1]->Draw("same");
-    //    txZDCpchan[6]->AddText("ZDC+ HAD2");
     txZDCpchan[6]->Draw("same");
     padPosChannel_Scan_noff[7] = (TPad*) cPosChannel_Scan_noff->cd(8);
     hPXpHADchan_noff[2]->Draw("same");
-    //    txZDCpchan[7]->AddText("ZDC+ HAD3");
     txZDCpchan[7]->Draw("same");
     padPosChannel_Scan_noff[8] = (TPad*) cPosChannel_Scan_noff->cd(9);
     padPosChannel_Scan_noff[8]->SetRightMargin(0.02);
     hPXpHADchan_noff[3]->Draw("same");
-    //    txZDCpchan[8]->AddText("ZDC+ HAD4");
     txZDCpchan[8]->Draw("same");
     padPosChannel_Scan_noff[9] = (TPad*) cPosChannel_Scan_noff->cd(10);
     padPosChannel_Scan_noff[9]->SetTopMargin(0.2);
     txSignalTS->Draw("same");
     txNoiseTS->Draw("same");
-    if (print_plots) cPosChannel_Scan_noff->Print("PosChannel_Scan_noff.pdf","pdf");
+    if (print_plots) cPosChannel_Scan_noff->Print("results/PosChannel_Scan_noff.pdf","pdf");
     if (close_plots) cPosChannel_Scan_noff->Close();
  
-//    tfout->Close();
 }
-
