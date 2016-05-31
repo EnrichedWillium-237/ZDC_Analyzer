@@ -2,9 +2,9 @@
 //
 // Contains the functions neccessary to calibrate the ZDC digis
 
-# include "TCanvas.h" 
+# include "TCanvas.h"
 # include "TFile.h"
-# include "TH1.h" 
+# include "TH1.h"
 # include "TH2.h"
 # include "TLeaf.h"
 # include "TLegend.h"
@@ -14,7 +14,7 @@
 # include "TProfile.h"
 # include "TStyle.h"
 # include "TTree.h"
-# include <iostream> 
+# include <iostream>
 
 static const int numEMchan = 5;
 static const int numHADchan = 4;
@@ -23,26 +23,29 @@ static const int numchan = 9;
 static const int nTS = 10; // number of time slices
 static const int TSsigMin = 4;
 static const int TSsigMax = 5;
-static const int TSnoiseMin = 8;
-static const int TSnoiseMax = 9;
+static const int TSnoiseMin = 7;
+static const int TSnoiseMax = 7;
+
+// gain adjustment of individual channels
+static const float gainEMp[numEMchan] = {1., 1., 1., 1., 1.};
+static const float gainHADp[numHADchan] = {1., 1., 1., 1.};
+static const float gainEMn[numEMchan] = {1., 1., 1., 1., 1.};
+static const float gainHADn[numHADchan] = {1., 1., 1., 1.};
 
 //static const float gainEMp[numEMchan] = {1., 1., 1., 1., 1.};
-//static const float gainHADp[numHADchan] = {1., 1., 1., 1.};
-//static const float gainEMn[numEMchan] = {1., 1., 1., 1., 1.};
-//static const float gainHADn[numHADchan] = {1., 1., 1., 1.};
-
-static const float gainEMp[numEMchan] = {1., 1., 1., 1., 1.};
-static const float gainHADp[numHADchan] = {1., 5.31, 4.14, 1.};
-static const float gainEMn[numEMchan] = {0.6, 0.8, 1.75, 0.9, 2.};
-static const float gainHADn[numHADchan] = {0.31, 5.0, 5.1, 3.1};
-
-//static const float gainEMp[numEMchan] = {.02, .02, .024, .032, .028};
-//static const float gainHADp[numHADchan] = {.02, .06, .02, .02};
-//static const float gainEMn[numEMchan] = {.025, .03, .029, .0158, .02};
-//static const float gainHADn[numHADchan] = {.0074, .068, .02, .22};
-
+//static const float gainHADp[numHADchan] = {1., 5.31, 4.14, 1.};
+//static const float gainEMn[numEMchan] = {0.6, 0.8, 1.75, 0.9, 2.};
+//static const float gainHADn[numHADchan] = {0.31, 5.0, 5.1, 3.1};
 
 TFile * fin;
+TFile * tfout;
+
+TDirectory * tdRunInfo;
+TDirectory * tdIndChanTS;
+TDirectory * tdIndChanTS_Nsub;
+TDirectory * tdIndChans;
+TDirectory * tdXprofiles;
+TDirectory * tdChanSums;
 
 TTree * CentTree;
 TTree * ZDCDigiTree;
@@ -104,7 +107,7 @@ TH2F * hZDCpHADchan_noff_Nsub[numHADchan];
 TH2F * hZDCnEMchan_noff_Nsub[numEMchan];
 TH2F * hZDCnHADchan_noff_Nsub[numHADchan];
 
-// ProfileX's ove the individual channels
+// ProfileX's over the individual channels
 TH1F * hPXpEMchan_cent[numEMchan];
 TH1F * hPXpHADchan_cent[numHADchan];
 TH1F * hPXnEMchan_cent[numEMchan];
@@ -130,8 +133,10 @@ TH1F * hZDCpEMsum;
 TH1F * hZDCpHADsum;
 TH1F * hZDCnEMsum;
 TH1F * hZDCnHADsum;
-TH2F * hZDCtotsum_vs_cent;
-TH2F * hZDCtotsum_vs_noff;
+TH2F * hZDCptotsum_vs_cent;
+TH2F * hZDCntotsum_vs_cent;
+TH2F * hZDCptotsum_vs_noff;
+TH2F * hZDCntotsum_vs_noff;
 
 TH1F * hZDCpEMsum_Nsub;
 TH1F * hZDCpHADsum_Nsub;
@@ -144,6 +149,11 @@ TH2F * hZDCpEM_vs_HAD;
 TH2F * hZDCnEM_vs_HAD;
 TH2F * hZDCpEM_vs_HAD_Nsub;
 TH2F * hZDCnEM_vs_HAD_Nsub;
+
+TH2F * hZDCpEM_vs_tot;
+TH2F * hZDCnEM_vs_tot;
+TH2F * hZDCpEM_vs_tot_Nsub;
+TH2F * hZDCnEM_vs_tot_Nsub;
 
 TH2F * hZDCpSum_vs_cent;
 TH2F * hZDCnSum_vs_cent;
@@ -304,9 +314,9 @@ void GetLeafs() {
     nevents = ZDCDigiTree->GetEntries();
 }
 
-
 void ReadZDCTree(int ievent)
 {
+    
     CentTree->GetEntry(ievent);
     centrality = CENTRAL->GetValue();
     noff = NOFF->GetValue();
@@ -318,30 +328,30 @@ void ReadZDCTree(int ievent)
     hnoff->Fill(noff);
     hbxing->Fill(bxing);
     
+    PEM1TotSig = 0;
+    PEM2TotSig = 0;
+    PEM3TotSig = 0;
+    PEM4TotSig = 0;
+    PEM5TotSig = 0;
+    PHAD1TotSig = 0;
+    PHAD2TotSig = 0;
+    PHAD3TotSig = 0;
+    PHAD4TotSig = 0;
+    
+    NEM1TotSig = 0;
+    NEM2TotSig = 0;
+    NEM3TotSig = 0;
+    NEM4TotSig = 0;
+    NEM5TotSig = 0;
+    NHAD1TotSig = 0;
+    NHAD2TotSig = 0;
+    NHAD3TotSig = 0;
+    NHAD4TotSig = 0;
+    
     // without noise subtraction
-    for (int iTS = TSsigMin; iTS<TSsigMax; iTS++) {
-        PEM1TotSig = 0;
-        PEM2TotSig = 0;
-        PEM3TotSig = 0;
-        PEM4TotSig = 0;
-        PEM5TotSig = 0;
-        PHAD1TotSig = 0;
-        PHAD2TotSig = 0;
-        PHAD3TotSig = 0;
-        PHAD4TotSig = 0;
-        
-        NEM1TotSig = 0;
-        NEM2TotSig = 0;
-        NEM3TotSig = 0;
-        NEM4TotSig = 0;
-        NEM5TotSig = 0;
-        NHAD1TotSig = 0;
-        NHAD2TotSig = 0;
-        NHAD3TotSig = 0;
-        NHAD4TotSig = 0;
-        
+    for (int iTS = TSsigMin; iTS<=TSsigMax; iTS++) {
         posEM1fC[iTS] = PEM1fC->GetValue(iTS);
-        posEM2fC[iTS] = PEM2fC->GetValue(iTS);
+        posEM2fC[iTS] = PEM2fC->GetValue(iTS-1);
         posEM3fC[iTS] = PEM3fC->GetValue(iTS);
         posEM4fC[iTS] = PEM4fC->GetValue(iTS);
         posEM5fC[iTS] = PEM5fC->GetValue(iTS);
@@ -349,27 +359,18 @@ void ReadZDCTree(int ievent)
         posHD2fC[iTS] = PHAD2fC->GetValue(iTS);
         posHD3fC[iTS] = PHAD3fC->GetValue(iTS);
         posHD4fC[iTS] = PHAD4fC->GetValue(iTS);
-
-//        negEM1fC[iTS] = NEM1fC->GetValue(iTS);
-//        negEM2fC[iTS] = NEM2fC->GetValue(iTS);
-//        negEM3fC[iTS] = NEM3fC->GetValue(iTS);
-//        negEM4fC[iTS] = NEM4fC->GetValue(iTS);
-//        negEM5fC[iTS] = NEM5fC->GetValue(iTS);
-//        negHD1fC[iTS] = NHAD1fC->GetValue(iTS);
-//        negHD2fC[iTS] = NHAD2fC->GetValue(iTS);
-//        negHD3fC[iTS] = NHAD3fC->GetValue(iTS);
-//        negHD4fC[iTS] = NHAD4fC->GetValue(iTS);
         
-//        negEM1fC[iTS] = NEM3fC->GetValue(iTS);
-//        negEM2fC[iTS] = NHAD1fC->GetValue(iTS);
-//        negEM3fC[iTS] = NEM1fC->GetValue(iTS);
-//        negEM4fC[iTS] = NEM2fC->GetValue(iTS);
-//        negEM5fC[iTS] = NEM5fC->GetValue(iTS);
-//        negHD1fC[iTS] = NEM4fC->GetValue(iTS);
-//        negHD2fC[iTS] = NHAD2fC->GetValue(iTS);
-//        negHD3fC[iTS] = NHAD3fC->GetValue(iTS);
-//        negHD4fC[iTS] = NHAD4fC->GetValue(iTS);
-
+        //        negEM1fC[iTS] = NEM1fC->GetValue(iTS);
+        //        negEM2fC[iTS] = NEM2fC->GetValue(iTS);
+        //        negEM3fC[iTS] = NEM3fC->GetValue(iTS);
+        //        negEM4fC[iTS] = NEM4fC->GetValue(iTS);
+        //        negEM5fC[iTS] = NEM5fC->GetValue(iTS);
+        //        negHD1fC[iTS] = NHAD1fC->GetValue(iTS);
+        //        negHD2fC[iTS] = NHAD2fC->GetValue(iTS);
+        //        negHD3fC[iTS] = NHAD3fC->GetValue(iTS);
+        //        negHD4fC[iTS] = NHAD4fC->GetValue(iTS);
+        
+        // It was noticed in data that ZDCHad1 was switched with ZDCEM4
         negEM1fC[iTS] = NEM1fC->GetValue(iTS);
         negEM2fC[iTS] = NEM2fC->GetValue(iTS);
         negEM3fC[iTS] = NEM3fC->GetValue(iTS);
@@ -597,20 +598,20 @@ void ReadZDCTree(int ievent)
         posHD3fC[iTS] = PHAD3fC->GetValue(iTS);
         posHD4fC[iTS] = PHAD4fC->GetValue(iTS);
         
-//        negEM1fC[iTS] = NEM1fC->GetValue(iTS);
-//        negEM2fC[iTS] = NEM2fC->GetValue(iTS);
-//        negEM3fC[iTS] = NEM3fC->GetValue(iTS);
-//        negEM4fC[iTS] = NEM4fC->GetValue(iTS);
-//        negEM5fC[iTS] = NEM5fC->GetValue(iTS);
-//        negHD1fC[iTS] = NHAD1fC->GetValue(iTS);
-//        negHD2fC[iTS] = NHAD2fC->GetValue(iTS);
-//        negHD3fC[iTS] = NHAD3fC->GetValue(iTS);
-//        negHD4fC[iTS] = NHAD4fC->GetValue(iTS);
+        //        negEM1fC[iTS] = NEM1fC->GetValue(iTS);
+        //        negEM2fC[iTS] = NEM2fC->GetValue(iTS);
+        //        negEM3fC[iTS] = NEM3fC->GetValue(iTS);
+        //        negEM4fC[iTS] = NEM4fC->GetValue(iTS);
+        //        negEM5fC[iTS] = NEM5fC->GetValue(iTS);
+        //        negHD1fC[iTS] = NHAD1fC->GetValue(iTS);
+        //        negHD2fC[iTS] = NHAD2fC->GetValue(iTS);
+        //        negHD3fC[iTS] = NHAD3fC->GetValue(iTS);
+        //        negHD4fC[iTS] = NHAD4fC->GetValue(iTS);
         
-        negEM1fC[iTS] = NEM3fC->GetValue(iTS);
-        negEM2fC[iTS] = NHAD1fC->GetValue(iTS);
-        negEM3fC[iTS] = NEM1fC->GetValue(iTS);
-        negEM4fC[iTS] = NEM2fC->GetValue(iTS);
+        negEM1fC[iTS] = NEM1fC->GetValue(iTS);
+        negEM2fC[iTS] = NEM2fC->GetValue(iTS);
+        negEM3fC[iTS] = NEM3fC->GetValue(iTS);
+        negEM4fC[iTS] = NHAD1fC->GetValue(iTS);
         negEM5fC[iTS] = NEM5fC->GetValue(iTS);
         negHD1fC[iTS] = NEM4fC->GetValue(iTS);
         negHD2fC[iTS] = NHAD2fC->GetValue(iTS);
@@ -657,9 +658,9 @@ void ReadZDCTree(int ievent)
         PHAD4TotSig_Noise = PHAD4TotSig_Noise + gainHADp[3]*posHD4fC[iTS];
         
         // ZDC negative side
-//        if (negEM1fC[iTS]<0) {
-//            negEM1fC[iTS] = 0;
-//        }
+        if (negEM1fC[iTS]<0) {
+            negEM1fC[iTS] = 0;
+        }
         NEM1TotSig_Noise = NEM1TotSig_Noise + gainEMn[0]*negEM1fC[iTS];
         if (negEM2fC[iTS]<0) {
             negEM2fC[iTS] = 0;
@@ -842,8 +843,12 @@ void ReadZDCTree(int ievent)
     hZDCnEMsum->Fill(EMnsum);
     hZDCpHADsum->Fill(HADpsum);
     hZDCnHADsum->Fill(HADnsum);
-    hZDCtotsum_vs_cent->Fill(centrality,ETpsum+ETnsum);
-    hZDCtotsum_vs_noff->Fill(noff,ETpsum+ETnsum);
+//    hZDCtotsum_vs_cent->Fill(centrality,ETpsum+ETnsum);
+//    hZDCtotsum_vs_noff->Fill(noff,ETpsum+ETnsum);
+    hZDCptotsum_vs_cent->Fill(centrality,ETpsum);
+    hZDCptotsum_vs_noff->Fill(noff,ETpsum);
+    hZDCntotsum_vs_cent->Fill(centrality,ETnsum);
+    hZDCntotsum_vs_noff->Fill(noff,ETnsum);
     
     hZDCpEMsum_Nsub->Fill(EMpsum_Nsubbed);
     hZDCnEMsum_Nsub->Fill(EMnsum_Nsubbed);
@@ -856,6 +861,11 @@ void ReadZDCTree(int ievent)
     hZDCnEM_vs_HAD->Fill(HADnsum, EMnsum);
     hZDCpEM_vs_HAD_Nsub->Fill(HADpsum_Nsubbed, EMpsum_Nsubbed);
     hZDCnEM_vs_HAD_Nsub->Fill(HADnsum_Nsubbed, EMnsum_Nsubbed);
+    
+    hZDCpEM_vs_tot->Fill(HADpsum + 0.1*EMpsum, EMpsum);
+    hZDCnEM_vs_tot->Fill(HADnsum + 0.1*EMnsum, EMnsum);
+    hZDCpEM_vs_tot_Nsub->Fill(HADpsum_Nsubbed + 0.1*EMpsum_Nsubbed, EMpsum_Nsubbed);
+    hZDCnEM_vs_tot_Nsub->Fill(HADnsum_Nsubbed + 0.1*EMnsum_Nsubbed, EMnsum_Nsubbed);
     
     hZDCpSum_vs_cent->Fill(centrality, ETpsum);
     hZDCnSum_vs_cent->Fill(centrality, ETnsum);

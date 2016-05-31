@@ -83,8 +83,10 @@ void MakeHists() {
     hZDCpHADsum = new TH1F("ZDCpHADsum","ZDCpHADsum", 300, 0, 20000);
     hZDCnEMsum = new TH1F("ZDCnEMsum","ZDCnEMsum", 300, 0, 20000);
     hZDCnHADsum = new TH1F("ZDCnHADsum","ZDCnHADsum", 300, 0, 20000);
-    hZDCtotsum_vs_cent = new TH2F("ZDCtotsum_cent","ZDCtotsum_cent", 10, 1, 200, 300, 0, 20000);
-    hZDCtotsum_vs_noff = new TH2F("ZDCtotsum_noff","ZDCtotsum_noff", 400, 0, noff_range, 300, 0, 20000);
+    hZDCptotsum_vs_cent = new TH2F("ZDCptotsum_cent","ZDCptotsum_cent", 10, 1, 200, 300, 0, 20000);
+    hZDCntotsum_vs_cent = new TH2F("ZDCntotsum_cent","ZDCntotsum_cent", 10, 1, 200, 300, 0, 20000);
+    hZDCptotsum_vs_noff = new TH2F("ZDCptotsum_noff","ZDCptotsum_noff", 400, 0, noff_range, 300, 0, 20000);
+    hZDCntotsum_vs_noff = new TH2F("ZDCntotsum_noff","ZDCntotsum_noff", 400, 0, noff_range, 300, 0, 20000);
     
     hZDCpEMsum_Nsub = new TH1F("ZDCpEMsum_Nsub","ZDCpEMsum_Nsub", 300, 0, 20000);
     hZDCpHADsum_Nsub = new TH1F("ZDCpHADsum_Nsub","ZDCpHADsum_Nsub", 300, 0, 20000);
@@ -93,15 +95,20 @@ void MakeHists() {
     hZDCtotsum_Nsub_vs_cent = new TH2F("hZDCtotsum_Nsub_cent","hZDCtotsum_Nsub_cent", 10, 1, 200, 300, 0, 20000);
     hZDCtotsum_Nsub_vs_noff = new TH2F("hZDCtotsum_Nsub_noff","hZDCtotsum_Nsub_noff", 400, 0, noff_range, 300, 0, 20000);
     
-    hZDCpEM_vs_HAD = new TH2F("ZDCpEM_vs_HAD","ZDCpEM_vs_HAD", 300, 0, 20000, 300, 0, 20000);
-    hZDCnEM_vs_HAD = new TH2F("ZDCnEM_vs_HAD","ZDCnEM_vs_HAD", 300, 0, 20000, 300, 0, 20000);
-    hZDCpEM_vs_HAD_Nsub = new TH2F("ZDCpEM_vs_HAD_Nsub","ZDCpEM_vs_HAD_Nsub", 300, 0, 20000, 300, 0, 20000);
-    hZDCnEM_vs_HAD_Nsub = new TH2F("ZDCnEM_vs_HAD_Nsub","ZDCnEM_vs_HAD_Nsub", 300, 0, 20000, 300, 0, 20000);
+    hZDCpEM_vs_HAD = new TH2F("ZDCpEM_vs_HAD","ZDCpEM_vs_HAD", 1000, 1, 20000, 1000, 1, 20000);
+    hZDCnEM_vs_HAD = new TH2F("ZDCnEM_vs_HAD","ZDCnEM_vs_HAD", 1000, 1, 20000, 1000, 1, 20000);
+    hZDCpEM_vs_HAD_Nsub = new TH2F("ZDCpEM_vs_HAD_Nsub","ZDCpEM_vs_HAD_Nsub", 1000, 1, 20000, 1000, 1, 20000);
+    hZDCnEM_vs_HAD_Nsub = new TH2F("ZDCnEM_vs_HAD_Nsub","ZDCnEM_vs_HAD_Nsub", 1000, 1, 20000, 1000, 1, 20000);
     
-    hZDCpSum_vs_cent = new TH2F("ZDCpSum_vs_cent","ZDCpSum_vs_cent", 10, 1, 200, 100, 1, 10000);
-    hZDCnSum_vs_cent = new TH2F("ZDCnSum_vs_cent","ZDCnSum_vs_cent", 10, 1, 200, 100, 1, 10000);
-    hZDCpSum_vs_cent_Nsub = new TH2F("ZDCpSum_vs_cent_Nsub","ZZDCpSum_vs_cent_Nsub", 10, 1, 200, 100, 1, 10000);
-    hZDCnSum_vs_cent_Nsub = new TH2F("ZDCnSum_vs_cent_Nsub","ZZDCnSum_vs_cent_Nsub", 10, 1, 200, 100, 1, 10000);
+    hZDCpEM_vs_tot = new TH2F("ZDCpEM_vs_tot","ZDCpEM_vs_tot", 1000, 1, 20000, 1000, 1, 20000);
+    hZDCnEM_vs_tot = new TH2F("ZDCnEM_vs_tot","ZDCnEM_vs_tot", 1000, 1, 20000, 1000, 1, 20000);
+    hZDCpEM_vs_tot_Nsub = new TH2F("ZDCpEM_vs_tot_Nsub","ZDCpEM_vs_tot_Nsub", 1000, 1, 20000, 1000, 1, 20000);
+    hZDCnEM_vs_tot_Nsub = new TH2F("ZDCnEM_vs_tot_Nsub","ZDCnEM_vs_tot_Nsub", 1000, 1, 20000, 1000, 1, 20000);
+    
+    hZDCpSum_vs_cent = new TH2F("ZDCpSum_vs_cent","ZDCpSum_vs_cent", 10, 1, 200, 400, 1, 10000);
+    hZDCnSum_vs_cent = new TH2F("ZDCnSum_vs_cent","ZDCnSum_vs_cent", 10, 1, 200, 400, 1, 10000);
+    hZDCpSum_vs_cent_Nsub = new TH2F("ZDCpSum_vs_cent_Nsub","ZZDCpSum_vs_cent_Nsub", 10, 1, 200, 400, 1, 10000);
+    hZDCnSum_vs_cent_Nsub = new TH2F("ZDCnSum_vs_cent_Nsub","ZZDCnSum_vs_cent_Nsub", 10, 1, 200, 400, 1, 10000);
     
     hZDCpSum_vs_noff = new TH2F("ZDCpSum_vs_noff","ZDCpSum_vs_noff", 50, 1, noff_range, 300, 0, 10000);
     hZDCnSum_vs_noff = new TH2F("ZDCnSum_vs_noff","ZDCnSum_vs_noff", 50, 1, noff_range, 300, 0, 10000);
@@ -162,29 +169,53 @@ void plot_style() {
     hZDCnHADsum->GetYaxis()->SetLabelSize(0.04);
     hZDCnHADsum->GetYaxis()->SetRangeUser(1,6000);
     
-    hZDCtotsum_vs_cent->SetTitle("");
-    hZDCtotsum_vs_cent->SetStats(kFALSE);
-    hZDCtotsum_vs_cent->SetXTitle("Centrality (0.5% per bin)");
-    hZDCtotsum_vs_cent->GetXaxis()->CenterTitle(kTRUE);
-    hZDCtotsum_vs_cent->SetYTitle("ZDC signal (fC)");
-    hZDCtotsum_vs_cent->GetYaxis()->CenterTitle(kTRUE);
-    hZDCtotsum_vs_cent->GetYaxis()->SetTitleOffset(1.75);
-    hZDCtotsum_vs_cent->GetYaxis()->SetTitleSize(0.05);
-    hZDCtotsum_vs_cent->GetYaxis()->SetLabelSize(0.04);
-    hZDCtotsum_vs_cent->GetYaxis()->SetRangeUser(1,6000);
-    hZDCtotsum_vs_cent->SetOption("colz");
+    hZDCptotsum_vs_cent->SetTitle("");
+    hZDCptotsum_vs_cent->SetStats(kFALSE);
+    hZDCptotsum_vs_cent->SetXTitle("Centrality (0.5% per bin)");
+    hZDCptotsum_vs_cent->GetXaxis()->CenterTitle(kTRUE);
+    hZDCptotsum_vs_cent->SetYTitle("ZDC signal (fC)");
+    hZDCptotsum_vs_cent->GetYaxis()->CenterTitle(kTRUE);
+    hZDCptotsum_vs_cent->GetYaxis()->SetTitleOffset(1.75);
+    hZDCptotsum_vs_cent->GetYaxis()->SetTitleSize(0.05);
+    hZDCptotsum_vs_cent->GetYaxis()->SetLabelSize(0.04);
+    hZDCptotsum_vs_cent->GetYaxis()->SetRangeUser(1,20000);
+    hZDCptotsum_vs_cent->SetOption("colz");
     
-    hZDCtotsum_vs_noff->SetTitle("");
-    hZDCtotsum_vs_noff->SetStats(kFALSE);
-    hZDCtotsum_vs_noff->SetXTitle("N_{pixel tracks}");
-    hZDCtotsum_vs_noff->GetXaxis()->CenterTitle(kTRUE);
-    hZDCtotsum_vs_noff->SetYTitle("ZDC signal (fC)");
-    hZDCtotsum_vs_noff->GetYaxis()->CenterTitle(kTRUE);
-    hZDCtotsum_vs_noff->GetYaxis()->SetTitleOffset(1.75);
-    hZDCtotsum_vs_noff->GetYaxis()->SetTitleSize(0.05);
-    hZDCtotsum_vs_noff->GetYaxis()->SetLabelSize(0.04);
-    hZDCtotsum_vs_noff->GetYaxis()->SetRangeUser(1,6000);
-    hZDCtotsum_vs_noff->SetOption("colz");
+    hZDCptotsum_vs_noff->SetTitle("");
+    hZDCptotsum_vs_noff->SetStats(kFALSE);
+    hZDCptotsum_vs_noff->SetXTitle("N_{pixel tracks}");
+    hZDCptotsum_vs_noff->GetXaxis()->CenterTitle(kTRUE);
+    hZDCptotsum_vs_noff->SetYTitle("ZDC signal (fC)");
+    hZDCptotsum_vs_noff->GetYaxis()->CenterTitle(kTRUE);
+    hZDCptotsum_vs_noff->GetYaxis()->SetTitleOffset(1.75);
+    hZDCptotsum_vs_noff->GetYaxis()->SetTitleSize(0.05);
+    hZDCptotsum_vs_noff->GetYaxis()->SetLabelSize(0.04);
+    hZDCptotsum_vs_noff->GetYaxis()->SetRangeUser(1,20000);
+    hZDCptotsum_vs_noff->SetOption("colz");
+    
+    hZDCntotsum_vs_cent->SetTitle("");
+    hZDCntotsum_vs_cent->SetStats(kFALSE);
+    hZDCntotsum_vs_cent->SetXTitle("Centrality (0.5% per bin)");
+    hZDCntotsum_vs_cent->GetXaxis()->CenterTitle(kTRUE);
+    hZDCntotsum_vs_cent->SetYTitle("ZDC signal (fC)");
+    hZDCntotsum_vs_cent->GetYaxis()->CenterTitle(kTRUE);
+    hZDCntotsum_vs_cent->GetYaxis()->SetTitleOffset(1.75);
+    hZDCntotsum_vs_cent->GetYaxis()->SetTitleSize(0.05);
+    hZDCntotsum_vs_cent->GetYaxis()->SetLabelSize(0.04);
+    hZDCntotsum_vs_cent->GetYaxis()->SetRangeUser(1,20000);
+    hZDCntotsum_vs_cent->SetOption("colz");
+    
+    hZDCntotsum_vs_noff->SetTitle("");
+    hZDCntotsum_vs_noff->SetStats(kFALSE);
+    hZDCntotsum_vs_noff->SetXTitle("N_{pixel tracks}");
+    hZDCntotsum_vs_noff->GetXaxis()->CenterTitle(kTRUE);
+    hZDCntotsum_vs_noff->SetYTitle("ZDC signal (fC)");
+    hZDCntotsum_vs_noff->GetYaxis()->CenterTitle(kTRUE);
+    hZDCntotsum_vs_noff->GetYaxis()->SetTitleOffset(1.75);
+    hZDCntotsum_vs_noff->GetYaxis()->SetTitleSize(0.05);
+    hZDCntotsum_vs_noff->GetYaxis()->SetLabelSize(0.04);
+    hZDCntotsum_vs_noff->GetYaxis()->SetRangeUser(1,20000);
+    hZDCntotsum_vs_noff->SetOption("colz");
     
     
     
@@ -297,6 +328,52 @@ void plot_style() {
     hZDCnEM_vs_HAD_Nsub->GetYaxis()->SetTitleSize(0.05);
     hZDCnEM_vs_HAD_Nsub->GetYaxis()->SetLabelSize(0.04);
     hZDCnEM_vs_HAD_Nsub->SetOption("colz");
+    
+    
+    
+    hZDCpEM_vs_tot->SetTitle("");
+    hZDCpEM_vs_tot->SetStats(kFALSE);
+    hZDCpEM_vs_tot->SetXTitle("ZDC+ SumHAD + 0.1SumEM (fC)");
+    hZDCpEM_vs_tot->GetXaxis()->CenterTitle(kTRUE);
+    hZDCpEM_vs_tot->GetYaxis()->CenterTitle(kTRUE);
+    hZDCpEM_vs_tot->SetYTitle("ZDC+ EM signal (fC)");
+    hZDCpEM_vs_tot->GetYaxis()->SetTitleOffset(1.75);
+    hZDCpEM_vs_tot->GetYaxis()->SetTitleSize(0.05);
+    hZDCpEM_vs_tot->GetYaxis()->SetLabelSize(0.04);
+    hZDCpEM_vs_tot->SetOption("colz");
+    
+    hZDCnEM_vs_tot->SetTitle("");
+    hZDCnEM_vs_tot->SetStats(kFALSE);
+    hZDCnEM_vs_tot->SetXTitle("ZDC- SumHAD + 0.1SumEM (fC)");
+    hZDCnEM_vs_tot->GetXaxis()->CenterTitle(kTRUE);
+    hZDCnEM_vs_tot->GetYaxis()->CenterTitle(kTRUE);
+    hZDCnEM_vs_tot->SetYTitle("ZDC- EM signal (fC)");
+    hZDCnEM_vs_tot->GetYaxis()->SetTitleOffset(1.75);
+    hZDCnEM_vs_tot->GetYaxis()->SetTitleSize(0.05);
+    hZDCnEM_vs_tot->GetYaxis()->SetLabelSize(0.04);
+    hZDCnEM_vs_tot->SetOption("colz");
+    
+    hZDCpEM_vs_tot_Nsub->SetTitle("");
+    hZDCpEM_vs_tot_Nsub->SetStats(kFALSE);
+    hZDCpEM_vs_tot_Nsub->SetXTitle("Noise subtracted SumHAD + 0.1SumEM (fC)");
+    hZDCpEM_vs_tot_Nsub->GetXaxis()->CenterTitle(kTRUE);
+    hZDCpEM_vs_tot_Nsub->GetYaxis()->CenterTitle(kTRUE);
+    hZDCpEM_vs_tot_Nsub->SetYTitle("Noise subtracted ZDC+ EM signal (fC)");
+    hZDCpEM_vs_tot_Nsub->GetYaxis()->SetTitleOffset(1.75);
+    hZDCpEM_vs_tot_Nsub->GetYaxis()->SetTitleSize(0.05);
+    hZDCpEM_vs_tot_Nsub->GetYaxis()->SetLabelSize(0.04);
+    hZDCpEM_vs_tot_Nsub->SetOption("colz");
+    
+    hZDCnEM_vs_tot_Nsub->SetTitle("");
+    hZDCnEM_vs_tot_Nsub->SetStats(kFALSE);
+    hZDCnEM_vs_tot_Nsub->SetXTitle("Noise subtracted SumHAD + 0.1SumEM (fC)");
+    hZDCnEM_vs_tot_Nsub->GetXaxis()->CenterTitle(kTRUE);
+    hZDCnEM_vs_tot_Nsub->GetYaxis()->CenterTitle(kTRUE);
+    hZDCnEM_vs_tot_Nsub->SetYTitle("Noise subtracted ZDC+ EM signal (fC)");
+    hZDCnEM_vs_tot_Nsub->GetYaxis()->SetTitleOffset(1.75);
+    hZDCnEM_vs_tot_Nsub->GetYaxis()->SetTitleSize(0.05);
+    hZDCnEM_vs_tot_Nsub->GetYaxis()->SetLabelSize(0.04);
+    hZDCnEM_vs_tot_Nsub->SetOption("colz");
     
     
     
@@ -823,7 +900,7 @@ void plot_style() {
         hPXnHADchan_cent[HADchan]->GetYaxis()->SetTitleOffset(1.55);
         hPXnHADchan_cent[HADchan]->GetYaxis()->SetTitleSize(0.06);
         hPXnHADchan_cent[HADchan]->GetYaxis()->SetLabelSize(0.05);
-        hPXnHADchan_cent[HADchan]->GetYaxis()->SetRangeUser(1,centScan_max);
+        hPXnHADchan_cent[HADchan]->GetYaxis()->SetRangeUser(1,10000);
         hPXnHADchan_cent[HADchan]->SetOption("colz");
         
         hPXpHADchan_cent_Nsub[HADchan] = (TH1F*) hZDCpHADchan_cent_Nsub[HADchan]->ProfileX()->Clone(Form("PXpHADchan%d_cent_Nsub",HADchan+1));

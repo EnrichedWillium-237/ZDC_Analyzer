@@ -6,7 +6,7 @@
  
  Description: Plotting macro for the CMS Zero Degree Calorimeter (ZDC)
  
- Implementation: 
+ Implementation:
  <Notes of implementation>
  
  */
@@ -15,26 +15,26 @@
 //
 //
 
-# include "ReadZDCTree.C" 
+# include "ReadZDCTree.C"
 # include "plot_style.C"
+# include "TCanvas.h"
 
 using namespace std;
 
 void make_plots() {
     
     TH1::SetDefaultSumw2();
-    TH2::SetDefaultSumw2();
-    
+
     Bool_t close_plots = kFALSE;
-    Bool_t print_plots = kFALSE;
-    
+    Bool_t print_plots = kTRUE;
+
 //    fin = new TFile("/rfs/wmcbrayer/2015PbPb_ZDC/PbPb2015_PromptReco_MinimumBias2/merged/PbPb2015_PromptReco_MinBias2_262836.root"); // 1.6 GB
 //    fin = new TFile("/rfs/wmcbrayer/2015PbPb_ZDC/PbPb2015_PromptReco_MinimumBias2/merged/PbPb2015_PromptReco_MinBias2_263005.root"); // 9.6 GB
 //    fin = new TFile("/rfs/wmcbrayer/2015PbPb_ZDC/PbPb2015_PromptReco_MinimumBias2/merged/PbPb2015_PromptReco_MinBias2_263213.root"); // 46 MB
     fin = new TFile("/rfs/wmcbrayer/2015PbPb_ZDC/PbPb2015_PromptReco_MinimumBias2/merged/PbPb2015_PromptReco_MinBias2_263293.root"); // 8.8 GB
 //    fin = new TFile("/rfs/wmcbrayer/2015PbPb_ZDC/PbPb2015_PromptReco_MinimumBias2/merged/PbPb2015_PromptReco_MinBias2_263362.root"); // 94 GB
 //    fin = new TFile("/rfs/wmcbrayer/2015PbPb_ZDC/PbPb2015_PromptReco_MinimumBias2/merged/PbPb2015_PromptReco_MinBias2_262834_263213.root");
-    
+
     CentTree = (TTree *) fin->Get("ZDCRecTree");
     // because of a typo the above line needs to stay until the trees are rewritten
     // "ZDCRecTree" will be replaced in output .root files with "CentTree"
@@ -42,46 +42,186 @@ void make_plots() {
     ZDCDigiTree = (TTree *) fin->Get("ZDCDigiTree");
     BeamTree = (TTree *) fin->Get("BeamTree");
     
+    tfout = new TFile("ZDC_plots.root","recreate");
+    tfout->cd();
+
     MakeHists();
     GetLeafs();
-    
+
     // main event loop
+    int nextStatus = ZDCDigiTree->GetEntries()/20;
     for (Int_t ievent = 0; ievent<nevents; ievent++)
     {
+        if(ievent>nextStatus) {
+            cout<<" "<<nextStatus/(double)ZDCDigiTree->GetEntries()<<endl;
+            nextStatus+=ZDCDigiTree->GetEntries()/20;
+        }
         ZDCDigiTree->GetEntry( ievent );
         ReadZDCTree( ievent );
     }
-    
     plot_style(); // apply plotting options
+
+    
+    tdRunInfo = (TDirectory *) tfout->mkdir("Run_Info");
+    tdRunInfo->cd();
+    hcent->Write();
+    hnoff->Write();
+    hbxing->Write();
+    
+    tdIndChans = (TDirectory *) tfout->mkdir("Signal_by_channel");
+    tdIndChans->cd();
+    for (int EMchan = 0; EMchan<5; EMchan++) {
+        hZDCpEMchan_cent[EMchan]->Write();
+        hZDCnEMchan_cent[EMchan]->Write();
+        hZDCpEMchan_cent_Nsub[EMchan]->Write();
+        hZDCnEMchan_cent_Nsub[EMchan]->Write();
+        hZDCpEMchan_noff[EMchan]->Write();
+        hZDCnEMchan_noff[EMchan]->Write();
+        hZDCpEMchan_noff_Nsub[EMchan]->Write();
+        hZDCnEMchan_noff_Nsub[EMchan]->Write();
+    }
+    for (int HADchan = 0; HADchan<4; HADchan++) {
+        hZDCpHADchan_cent[HADchan]->Write();
+        hZDCnHADchan_cent[HADchan]->Write();
+        hZDCpHADchan_cent_Nsub[HADchan]->Write();
+        hZDCnHADchan_cent_Nsub[HADchan]->Write();
+        hZDCpHADchan_noff[HADchan]->Write();
+        hZDCnHADchan_noff[HADchan]->Write();
+        hZDCpHADchan_noff_Nsub[HADchan]->Write();
+        hZDCnHADchan_noff_Nsub[HADchan]->Write();
+    }
+    
+    tdXprofiles = (TDirectory *) tfout->mkdir("ProfileXs");
+    tdXprofiles->cd();
+    for (int iTS = TSsigMin; iTS<+TSsigMax; iTS++) {
+        for (int EMchan = 0; EMchan<5; EMchan++) {
+            hPXpEMchan_cent[EMchan]->Write();
+            hPXnEMchan_cent[EMchan]->Write();
+            hPXpEMchan_cent_Nsub[EMchan]->Write();
+            hPXnEMchan_cent_Nsub[EMchan]->Write();
+            hPXpEMchan_noff[EMchan]->Write();
+            hPXnEMchan_noff[EMchan]->Write();
+            hPXpEMchan_noff_Nsub[EMchan]->Write();
+            hPXnEMchan_noff_Nsub[EMchan]->Write();
+        }
+        for (int HADchan = 0; HADchan<4; HADchan++) {
+            hPXpHADchan_cent[HADchan]->Write();
+            hPXnHADchan_cent[HADchan]->Write();
+            hPXpHADchan_cent_Nsub[HADchan]->Write();
+            hPXnHADchan_cent_Nsub[HADchan]->Write();
+            hPXpHADchan_noff[HADchan]->Write();
+            hPXnHADchan_noff[HADchan]->Write();
+            hPXpHADchan_noff_Nsub[HADchan]->Write();
+            hPXnHADchan_noff_Nsub[HADchan]->Write();
+        }
+    }
+    
+    tdIndChanTS = (TDirectory *) tfout->mkdir("Signal_by_channel_by_TS");
+    tdIndChanTS->cd();
+    for (int iTS = TSsigMin; iTS<+TSsigMax; iTS++) {
+        for (int EMchan = 0; EMchan<5; EMchan++) {
+            hZDCpEM[iTS][EMchan]->Write();
+            hZDCnEM[iTS][EMchan]->Write();
+            hZDCpEM_vs_cent[iTS][EMchan]->Write();
+            hZDCnEM_vs_cent[iTS][EMchan]->Write();
+            hZDCpEM_vs_noff[iTS][EMchan]->Write();
+            hZDCnEM_vs_noff[iTS][EMchan]->Write();
+            
+            hZDCpEM_Nsub[iTS][EMchan]->Write();
+            hZDCnEM_Nsub[iTS][EMchan]->Write();
+            hZDCpEM_vs_cent_Nsub[iTS][EMchan]->Write();
+            hZDCnEM_vs_cent_Nsub[iTS][EMchan]->Write();
+            hZDCpEM_vs_noff_Nsub[iTS][EMchan]->Write();
+            hZDCnEM_vs_noff_Nsub[iTS][EMchan]->Write();
+        }
+        for (int HADchan = 0; HADchan<4; HADchan++) {
+            hZDCpHAD[iTS][HADchan]->Write();
+            hZDCnHAD[iTS][HADchan]->Write();
+            hZDCpHAD_vs_cent[iTS][HADchan]->Write();
+            hZDCnHAD_vs_cent[iTS][HADchan]->Write();
+            hZDCpHAD_vs_noff[iTS][HADchan]->Write();
+            hZDCnHAD_vs_noff[iTS][HADchan]->Write();
+            
+            hZDCpHAD_Nsub[iTS][HADchan]->Write();
+            hZDCnHAD_Nsub[iTS][HADchan]->Write();
+            hZDCpHAD_vs_cent_Nsub[iTS][HADchan]->Write();
+            hZDCnHAD_vs_cent_Nsub[iTS][HADchan]->Write();
+            hZDCpHAD_vs_noff_Nsub[iTS][HADchan]->Write();
+            hZDCnHAD_vs_noff_Nsub[iTS][HADchan]->Write();
+        }
+    }
+
+    tdChanSums = (TDirectory *) tfout->mkdir("Energy_sums");
+    tdChanSums->cd();
+    hZDCpEMsum->Write();
+    hZDCpHADsum->Write();
+    hZDCnEMsum->Write();
+    hZDCnHADsum->Write();
+    hZDCptotsum_vs_cent->Write();
+    hZDCntotsum_vs_cent->Write();
+    hZDCptotsum_vs_noff->Write();
+    hZDCntotsum_vs_noff->Write();
+    hZDCpEMsum_Nsub->Write();
+    hZDCpHADsum_Nsub->Write();
+    hZDCnEMsum_Nsub->Write();
+    hZDCnHADsum_Nsub->Write();
+    hZDCtotsum_Nsub_vs_cent->Write();
+    hZDCtotsum_Nsub_vs_noff->Write();
+    hZDCpEM_vs_HAD->Write();
+    hZDCnEM_vs_HAD->Write();
+    hZDCpEM_vs_HAD_Nsub->Write();
+    hZDCnEM_vs_HAD_Nsub->Write();
+    hZDCpEM_vs_tot->Write();
+    hZDCnEM_vs_tot->Write();
+    hZDCpEM_vs_tot_Nsub->Write();
+    hZDCnEM_vs_tot_Nsub->Write();
+    hZDCpSum_vs_cent->Write();
+    hZDCnSum_vs_cent->Write();
+    hZDCpSum_vs_cent_Nsub->Write();
+//    hZDCnSum_vs_cent_Nsub->Write();
+    hZDCpSum_vs_noff->Write();
+    hZDCnSum_vs_noff->Write();
+    hZDCpSum_vs_noff_Nsub->Write();
+    hZDCnSum_vs_noff_Nsub->Write();
+    hZDCpSum_vs_TS->Write();
+    hZDCnSum_vs_TS->Write();
+    hZDCpSum_vs_TS_Nsub->Write();
+    hZDCnSum_vs_TS_Nsub->Write();
+    for (int chan = 0; chan<numchan; chan++) {
+        hZDCpSumTotal[chan]->Write();
+        hZDCnSumTotal[chan]->Write();
+    }
     
     //------------------Make the plots------------------//
+    
     gStyle->SetPalette(1);
     gStyle->SetErrorX(0.5);
+    
+    TPaveText * txSignalTS = new TPaveText(0.50, 0.87, 0.82, 0.94,"NDC");
+    txSignalTS->SetFillColor(kWhite);
+    txSignalTS->SetBorderSize(0);
+    txSignalTS->SetTextFont(43);
+    txSignalTS->SetTextSize(20);
+    txSignalTS->AddText(Form("Timeslice(s) for signal: %d-%d",TSsigMin,TSsigMax));
+    
+    TPaveText * txNoiseTS = new TPaveText(0.50, 0.80, 0.82, 0.87,"NDC");
+    txNoiseTS->SetFillColor(kWhite);
+    txNoiseTS->SetBorderSize(0);
+    txNoiseTS->SetTextFont(43);
+    txNoiseTS->SetTextSize(20);
+    txNoiseTS->AddText(Form("Timeslice(s) for noise: %d-%d",TSnoiseMin,TSnoiseMax));
     
     //---signal vs. centrality bin---//
     TCanvas * cZDCp_signal_vs_cent = new TCanvas("cZDCp_signal_vs_cent","cZDCp_signal_vs_cent",700,600);
     TPad * padZDCp_signal_vs_cent = (TPad*) cZDCp_signal_vs_cent->cd();
     padZDCp_signal_vs_cent->SetLogz();
     padZDCp_signal_vs_cent->SetRightMargin(0.115);
-//    hZDCpSum_vs_cent->Draw();
-//    hZDCpSum_vs_cent->ProfileX()->Draw("same");
-    hZDCpSum_vs_cent_Nsub->Draw();
+    hZDCpSum_vs_cent_Nsub->Draw("same");
     hZDCpSum_vs_cent_Nsub->ProfileX()->Draw("same");
+    txSignalTS->Draw("same");
+    txNoiseTS->Draw("same");
     if (print_plots) cZDCp_signal_vs_cent->Print("ZDCp_signal_vs_cent.pdf","pdf");
     if (close_plots) cZDCp_signal_vs_cent->Close();
-
-    
-    TCanvas * cZDCn_signal_vs_cent = new TCanvas("cZDCn_signal_vs_cent","cZDCn_signal_vs_cent",700,600);
-    TPad * padZDCn_signal_vs_cent = (TPad*) cZDCn_signal_vs_cent->cd();
-    padZDCn_signal_vs_cent->SetLogz();
-    padZDCn_signal_vs_cent->SetRightMargin(0.115);
-//    hZDCnSum_vs_cent->Draw();
-//    hZDCnSum_vs_cent->ProfileX()->Draw("same");
-    hZDCnSum_vs_cent_Nsub->Draw();
-    hZDCnSum_vs_cent_Nsub->ProfileX()->Draw("same");
-    if (print_plots) cZDCn_signal_vs_cent->Print("ZDCn_signal_vs_cent.pdf","pdf");
-    if (close_plots) cZDCn_signal_vs_cent->Close();
-    
     
     
     //---signal vs. number of tracks---//
@@ -89,62 +229,33 @@ void make_plots() {
     TPad * padZDCp_signal_vs_noff = (TPad*) cZDCp_signal_vs_noff->cd();
     padZDCp_signal_vs_noff->SetLogz();
     padZDCp_signal_vs_noff->SetRightMargin(0.115);
-//    hZDCpSum_vs_noff->Draw();
-//    hZDCpSum_vs_noff->ProfileX()->Draw("same");
-    hZDCpSum_vs_noff_Nsub->Draw();
+    hZDCpSum_vs_noff_Nsub->Draw("same");
     hZDCpSum_vs_noff_Nsub->ProfileX()->Draw("same");
+    txSignalTS->Draw("same");
+    txNoiseTS->Draw("same");
     if (print_plots) cZDCp_signal_vs_noff->Print("ZDCp_signal_vs_noff.pdf","pdf");
     if (close_plots) cZDCp_signal_vs_noff->Close();
     
-    TCanvas * cZDCn_signal_vs_noff = new TCanvas("cZDCn_signal_vs_noff","cZDCn_signal_vs_noff",700,600);
-    TPad * padZDCn_signal_vs_noff = (TPad*) cZDCn_signal_vs_noff->cd();
-    padZDCn_signal_vs_noff->SetLogz();
-    padZDCn_signal_vs_noff->SetRightMargin(0.115);
-//    hZDCnSum_vs_noff->Draw();
-//    hZDCnSum_vs_noff->ProfileX()->Draw("same");
-    hZDCnSum_vs_noff_Nsub->Draw();
-    hZDCnSum_vs_noff_Nsub->ProfileX()->Draw("same");
-    if (print_plots) cZDCn_signal_vs_noff->Print("ZDCn_signal_vs_noff.pdf","pdf");
-    if (close_plots) cZDCn_signal_vs_noff->Close();
     
+    //---EM vs. HAD + 0.1*EM---//
+    TCanvas * cZDCpEM_vs_tot = new TCanvas("cZDCpEM_vs_tot","cZDCpEM_vs_tot",700,650);
+    TPad * padZDCpEM_vs_tot = (TPad*) cZDCpEM_vs_tot->cd();
+    padZDCpEM_vs_tot->SetRightMargin(0.125);
+    cZDCpEM_vs_tot->cd();
+    hZDCpEM_vs_tot->Draw("same");
+    txSignalTS->Draw("same");
+    if (print_plots) cZDCpEM_vs_tot->Print("cZDCpEM_vs_tot.pdf","pdf");
+    if (close_plots) cZDCpEM_vs_tot->Close();
     
-    
-    //---total ZDC signal---//
-    TCanvas * cZDCsum_cent = new TCanvas("cZDCsum_cent","cZDCsum_cent",700,600);
-    TPad * padZDCsum_cent = (TPad*) cZDCsum_cent->cd();
-    padZDCsum_cent->SetLogz();
-    padZDCsum_cent->SetRightMargin(0.115);
-    hZDCtotsum_vs_cent->Draw();
-    hZDCtotsum_vs_cent->ProfileX()->Draw("same");
-    if (print_plots) cZDCsum_cent->Print("ZDCsum_cent.pdf","pdf");
-    if (close_plots) cZDCsum_cent->Close();
-    
-    TCanvas * cZDCsum_Nsub_cent = new TCanvas("cZDCsum_Nsub_cent","cZDCsum_Nsub_cent",700,600);
-    TPad * padZDCsum_Nsub_cent = (TPad*) cZDCsum_Nsub_cent->cd();
-    padZDCsum_Nsub_cent->SetLogz();
-    padZDCsum_Nsub_cent->SetRightMargin(0.115);
-    hZDCtotsum_Nsub_vs_cent->Draw();
-    hZDCtotsum_Nsub_vs_cent->ProfileX()->Draw("same");
-    if (print_plots) cZDCsum_Nsub_cent->Print("ZDCsum_Nsub_cent.pdf","pdf");
-    if (close_plots) cZDCsum_Nsub_cent->Close();
-    
-    TCanvas * cZDCsum_noff = new TCanvas("cZDCsum_noff","cZDCsum_noff",700,600);
-    TPad * padZDCsum_noff = (TPad*) cZDCsum_noff->cd();
-    padZDCsum_noff->SetLogz();
-    padZDCsum_noff->SetRightMargin(0.115);
-    hZDCtotsum_vs_noff->Draw();
-    hZDCtotsum_vs_noff->ProfileX()->Draw("same");
-    if (print_plots) cZDCsum_noff->Print("ZDCsum_noff.pdf","pdf");
-    if (close_plots) cZDCsum_noff->Close();
-    
-    TCanvas * cZDCsum_Nsub_noff = new TCanvas("cZDCsum_Nsub_noff","cZDCsum_Nsub_noff",700,600);
-    TPad * padZDCsum_Nsub_noff = (TPad*) cZDCsum_Nsub_noff->cd();
-    padZDCsum_Nsub_noff->SetLogz();
-    padZDCsum_Nsub_noff->SetRightMargin(0.115);
-    hZDCtotsum_Nsub_vs_noff->Draw();
-    hZDCtotsum_Nsub_vs_noff->ProfileX()->Draw("same");
-    if (print_plots) cZDCsum_Nsub_noff->Print("ZDCsum_Nsub_noff.pdf","pdf");
-    if (close_plots) cZDCsum_Nsub_noff->Close();
+    TCanvas * cZDCpEM_vs_tot_Nsub = new TCanvas("cZDCpEM_vs_tot_Nsub","cZDCpEM_vs_tot_Nsub",700,650);
+    TPad * padZDCpEM_vs_tot_Nsub = (TPad*) cZDCpEM_vs_tot_Nsub->cd();
+    padZDCpEM_vs_tot_Nsub->SetRightMargin(0.125);
+    cZDCpEM_vs_tot_Nsub->cd();
+    hZDCpEM_vs_tot_Nsub->Draw("same");
+    txSignalTS->Draw("same");
+    txNoiseTS->Draw("same");
+    if (print_plots) cZDCpEM_vs_tot_Nsub->Print("cZDCpEM_vs_tot_Nsub.pdf","pdf");
+    if (close_plots) cZDCpEM_vs_tot_Nsub->Close();
     
     
     //---signal scan: entire ZDC signal in each channel---//
@@ -163,9 +274,9 @@ void make_plots() {
     for (int EMchan = 1; EMchan<=numEMchan; EMchan++) {
         padPosChannel_Scan_cent[EMchan-1] = (TPad*) cPosChannel_Scan_cent->cd(EMchan);
         padPosChannel_Scan_cent[EMchan-1]->SetTopMargin(0.05);
-        hPXpEMchan_cent[EMchan-1]->Draw();
+        hPXpEMchan_cent[EMchan-1]->Draw("same");
         txZDCpchan[EMchan-1]->AddText(Form("ZDC+ EM%d",EMchan));
-        txZDCpchan[EMchan-1]->Draw();
+        txZDCpchan[EMchan-1]->Draw("same");
     }
     hPXpEMchan_cent[0]->GetYaxis()->SetTitleOffset(1.35);
     hPXpEMchan_cent[0]->GetYaxis()->SetTitleSize(0.07);
@@ -173,60 +284,29 @@ void make_plots() {
     padPosChannel_Scan_cent[4]->SetRightMargin(0.01);
     padPosChannel_Scan_cent[4]->SetBottomMargin(0.01);
     padPosChannel_Scan_cent[5] = (TPad*) cPosChannel_Scan_cent->cd(6);
-    hPXpHADchan_cent[0]->Draw();
+    hPXpHADchan_cent[0]->Draw("same");
     txZDCpchan[5]->AddText("ZDC+ HAD1");
-    txZDCpchan[5]->Draw();
+    txZDCpchan[5]->Draw("same");
     padPosChannel_Scan_cent[6] = (TPad*) cPosChannel_Scan_cent->cd(7);
-    hPXpHADchan_cent[1]->Draw();
+    hPXpHADchan_cent[1]->Draw("same");
     txZDCpchan[6]->AddText("ZDC+ HAD2");
-    txZDCpchan[6]->Draw();
+    txZDCpchan[6]->Draw("same");
     padPosChannel_Scan_cent[7] = (TPad*) cPosChannel_Scan_cent->cd(8);
-    hPXpHADchan_cent[2]->Draw();
+    hPXpHADchan_cent[2]->Draw("same");
     txZDCpchan[7]->AddText("ZDC+ HAD3");
-    txZDCpchan[7]->Draw();
+    txZDCpchan[7]->Draw("same");
     padPosChannel_Scan_cent[8] = (TPad*) cPosChannel_Scan_cent->cd(9);
     padPosChannel_Scan_cent[8]->SetRightMargin(0.02);
-    hPXpHADchan_cent[3]->Draw();
+    hPXpHADchan_cent[3]->Draw("same");
     txZDCpchan[8]->AddText("ZDC+ HAD4");
-    txZDCpchan[8]->Draw();
+    txZDCpchan[8]->Draw("same");
     padPosChannel_Scan_cent[9] = (TPad*) cPosChannel_Scan_cent->cd(10);
     padPosChannel_Scan_cent[9]->SetTopMargin(0.2);
+    txSignalTS->Draw("same");
+    txNoiseTS->Draw("same");
     if (print_plots) cPosChannel_Scan_cent->Print("PosChannel_Scan_cent.pdf","pdf");
     if (close_plots) cPosChannel_Scan_cent->Close();
     
-    
-    TCanvas * cPosChannel_Scan_cent_Nsub = new TCanvas("cPosChannel_Scan_cent_Nsub","cPosChannel_Scan_cent_Nsub",1250,550);
-    cPosChannel_Scan_cent_Nsub->Divide(5,2,0,0);
-    TPad * padPosChannel_Scan_cent_Nsub[10];
-    for (int EMchan = 1; EMchan<=numEMchan; EMchan++) {
-        padPosChannel_Scan_cent_Nsub[EMchan-1] = (TPad*) cPosChannel_Scan_cent_Nsub->cd(EMchan);
-        padPosChannel_Scan_cent_Nsub[EMchan-1]->SetTopMargin(0.05);
-        hPXpEMchan_cent_Nsub[EMchan-1]->Draw();
-        txZDCpchan[EMchan-1]->Draw();
-    }
-    hPXpEMchan_cent_Nsub[0]->GetYaxis()->SetTitleOffset(1.35);
-    hPXpEMchan_cent_Nsub[0]->GetYaxis()->SetTitleSize(0.07);
-    hPXpEMchan_cent_Nsub[0]->GetYaxis()->SetLabelSize(0.06);
-    padPosChannel_Scan_cent_Nsub[4]->SetRightMargin(0.01);
-    padPosChannel_Scan_cent_Nsub[4]->SetBottomMargin(0.01);
-    padPosChannel_Scan_cent_Nsub[5] = (TPad*) cPosChannel_Scan_cent_Nsub->cd(6);
-    hPXpHADchan_cent_Nsub[0]->Draw();
-    txZDCpchan[5]->Draw();
-    padPosChannel_Scan_cent_Nsub[6] = (TPad*) cPosChannel_Scan_cent_Nsub->cd(7);
-    hPXpHADchan_cent_Nsub[1]->Draw();
-    txZDCpchan[6]->Draw();
-    padPosChannel_Scan_cent_Nsub[7] = (TPad*) cPosChannel_Scan_cent_Nsub->cd(8);
-    hPXpHADchan_cent_Nsub[2]->Draw();
-    txZDCpchan[7]->Draw();
-    padPosChannel_Scan_cent_Nsub[8] = (TPad*) cPosChannel_Scan_cent_Nsub->cd(9);
-    padPosChannel_Scan_cent_Nsub[8]->SetRightMargin(0.02);
-    hPXpHADchan_cent_Nsub[3]->Draw();
-    txZDCpchan[8]->Draw();
-    padPosChannel_Scan_cent_Nsub[9] = (TPad*) cPosChannel_Scan_cent_Nsub->cd(10);
-    padPosChannel_Scan_cent_Nsub[9]->SetTopMargin(0.2);
-    if (print_plots) cPosChannel_Scan_cent_Nsub->Print("PosChannel_Scan_cent_Nsub.pdf","pdf");
-    if (close_plots) cPosChannel_Scan_cent_Nsub->Close();
-
     
     TCanvas * cPosChannel_Scan_noff = new TCanvas("cPosChannel_Scan_noff","cPosChannel_Scan_noff",1250,550);
     cPosChannel_Scan_noff->Divide(5,2,0,0);
@@ -234,8 +314,9 @@ void make_plots() {
     for (int EMchan = 1; EMchan<=numEMchan; EMchan++) {
         padPosChannel_Scan_noff[EMchan-1] = (TPad*) cPosChannel_Scan_noff->cd(EMchan);
         padPosChannel_Scan_noff[EMchan-1]->SetTopMargin(0.05);
-        hPXpEMchan_noff[EMchan-1]->Draw();
-        txZDCpchan[EMchan-1]->Draw();
+        hPXpEMchan_noff[EMchan-1]->Draw("same");
+        //        txZDCpchan[EMchan-1]->AddText(Form("ZDC+ EM%d",EMchan));
+        txZDCpchan[EMchan-1]->Draw("same");
     }
     hPXpEMchan_noff[0]->GetYaxis()->SetTitleOffset(1.35);
     hPXpEMchan_noff[0]->GetYaxis()->SetTitleSize(0.07);
@@ -243,203 +324,29 @@ void make_plots() {
     padPosChannel_Scan_noff[4]->SetRightMargin(0.01);
     padPosChannel_Scan_noff[4]->SetBottomMargin(0.01);
     padPosChannel_Scan_noff[5] = (TPad*) cPosChannel_Scan_noff->cd(6);
-    hPXpHADchan_noff[0]->Draw();
-    txZDCpchan[5]->Draw();
+    hPXpHADchan_noff[0]->Draw("same");
+    //    txZDCpchan[5]->AddText("ZDC+ HAD1");
+    txZDCpchan[5]->Draw("same");
     padPosChannel_Scan_noff[6] = (TPad*) cPosChannel_Scan_noff->cd(7);
-    hPXpHADchan_noff[1]->Draw();
-    txZDCpchan[6]->Draw();
+    hPXpHADchan_noff[1]->Draw("same");
+    //    txZDCpchan[6]->AddText("ZDC+ HAD2");
+    txZDCpchan[6]->Draw("same");
     padPosChannel_Scan_noff[7] = (TPad*) cPosChannel_Scan_noff->cd(8);
-    hPXpHADchan_noff[2]->Draw();
-    txZDCpchan[7]->Draw();
+    hPXpHADchan_noff[2]->Draw("same");
+    //    txZDCpchan[7]->AddText("ZDC+ HAD3");
+    txZDCpchan[7]->Draw("same");
     padPosChannel_Scan_noff[8] = (TPad*) cPosChannel_Scan_noff->cd(9);
     padPosChannel_Scan_noff[8]->SetRightMargin(0.02);
-    hPXpHADchan_noff[3]->Draw();
-    txZDCpchan[8]->Draw();
+    hPXpHADchan_noff[3]->Draw("same");
+    //    txZDCpchan[8]->AddText("ZDC+ HAD4");
+    txZDCpchan[8]->Draw("same");
     padPosChannel_Scan_noff[9] = (TPad*) cPosChannel_Scan_noff->cd(10);
     padPosChannel_Scan_noff[9]->SetTopMargin(0.2);
+    txSignalTS->Draw("same");
+    txNoiseTS->Draw("same");
     if (print_plots) cPosChannel_Scan_noff->Print("PosChannel_Scan_noff.pdf","pdf");
     if (close_plots) cPosChannel_Scan_noff->Close();
-
-    
-    TCanvas * cPosChannel_Scan_noff_Nsub = new TCanvas("cPosChannel_Scan_noff_Nsub","cPosChannel_Scan_noff_Nsub",1250,550);
-    cPosChannel_Scan_noff_Nsub->Divide(5,2,0,0);
-    TPad * padPosChannel_Scan_noff_Nsub[10];
-    for (int EMchan = 1; EMchan<=numEMchan; EMchan++) {
-        padPosChannel_Scan_noff_Nsub[EMchan-1] = (TPad*) cPosChannel_Scan_noff_Nsub->cd(EMchan);
-        padPosChannel_Scan_noff_Nsub[EMchan-1]->SetTopMargin(0.05);
-        hPXpEMchan_noff_Nsub[EMchan-1]->Draw();
-        txZDCpchan[EMchan-1]->Draw();
-    }
-    hPXpEMchan_noff_Nsub[0]->GetYaxis()->SetTitleOffset(1.35);
-    hPXpEMchan_noff_Nsub[0]->GetYaxis()->SetTitleSize(0.07);
-    hPXpEMchan_noff_Nsub[0]->GetYaxis()->SetLabelSize(0.06);
-    padPosChannel_Scan_noff_Nsub[4]->SetRightMargin(0.01);
-    padPosChannel_Scan_noff_Nsub[4]->SetBottomMargin(0.01);
-    padPosChannel_Scan_noff_Nsub[5] = (TPad*) cPosChannel_Scan_noff_Nsub->cd(6);
-    hPXpHADchan_noff_Nsub[0]->Draw();
-    txZDCpchan[5]->Draw();
-    padPosChannel_Scan_noff_Nsub[6] = (TPad*) cPosChannel_Scan_noff_Nsub->cd(7);
-    hPXpHADchan_noff_Nsub[1]->Draw();
-    txZDCpchan[6]->Draw();
-    padPosChannel_Scan_noff_Nsub[7] = (TPad*) cPosChannel_Scan_noff_Nsub->cd(8);
-    hPXpHADchan_noff_Nsub[2]->Draw();
-    txZDCpchan[7]->Draw();
-    padPosChannel_Scan_noff_Nsub[8] = (TPad*) cPosChannel_Scan_noff_Nsub->cd(9);
-    padPosChannel_Scan_noff_Nsub[8]->SetRightMargin(0.02);
-    hPXpHADchan_noff_Nsub[3]->Draw();
-    txZDCpchan[8]->Draw();
-    padPosChannel_Scan_noff_Nsub[9] = (TPad*) cPosChannel_Scan_noff->cd(10);
-    padPosChannel_Scan_noff_Nsub[9]->SetTopMargin(0.2);
-    if (print_plots) cPosChannel_Scan_noff_Nsub->Print("PosChannel_Scan_noff_Nsub.pdf","pdf");
-    if (close_plots) cPosChannel_Scan_noff_Nsub->Close();
-    
-    
-    
-    
-    
-    TPaveText * txZDCnchan[9];
-    for (int chan = 0; chan<(numEMchan+numHADchan); chan++) {
-        txZDCnchan[chan] = new TPaveText(0.62,0.78,0.91,0.90,"NDC");
-        txZDCnchan[chan]->SetFillColor(kWhite);
-        txZDCnchan[chan]->SetBorderSize(0);
-        txZDCnchan[chan]->SetTextFont(43);
-        txZDCnchan[chan]->SetTextSize(18);
-    }
-    
-    TCanvas * cNegChannel_Scan_cent = new TCanvas("cNegChannel_Scan_cent","cNegChannel_Scan_cent",1250,550);
-    cNegChannel_Scan_cent->Divide(5,2,0,0);
-    TPad * padNegChannel_Scan_cent[10];
-    for (int EMchan = 1; EMchan<=numEMchan; EMchan++) {
-        padNegChannel_Scan_cent[EMchan-1] = (TPad*) cNegChannel_Scan_cent->cd(EMchan);
-        padNegChannel_Scan_cent[EMchan-1]->SetTopMargin(0.05);
-        hPXnEMchan_cent[EMchan-1]->Draw();
-        txZDCnchan[EMchan-1]->AddText(Form("ZDC- EM%d",EMchan));
-        txZDCnchan[EMchan-1]->Draw();
-    }
-    hPXnEMchan_cent[0]->GetYaxis()->SetTitleOffset(1.35);
-    hPXnEMchan_cent[0]->GetYaxis()->SetTitleSize(0.07);
-    hPXnEMchan_cent[0]->GetYaxis()->SetLabelSize(0.06);
-    padNegChannel_Scan_cent[4]->SetRightMargin(0.01);
-    padNegChannel_Scan_cent[4]->SetBottomMargin(0.01);
-    padNegChannel_Scan_cent[5] = (TPad*) cNegChannel_Scan_cent->cd(6);
-    hPXnHADchan_cent[0]->Draw();
-    txZDCnchan[5]->AddText("ZDC- HAD1");
-    txZDCnchan[5]->Draw();
-    padNegChannel_Scan_cent[6] = (TPad*) cNegChannel_Scan_cent->cd(7);
-    hPXnHADchan_cent[1]->Draw();
-    txZDCnchan[6]->AddText("ZDC- HAD2");
-    txZDCnchan[6]->Draw();
-    padNegChannel_Scan_cent[7] = (TPad*) cNegChannel_Scan_cent->cd(8);
-    hPXnHADchan_cent[2]->Draw();
-    txZDCnchan[7]->AddText("ZDC- HAD3");
-    txZDCnchan[7]->Draw();
-    padNegChannel_Scan_cent[8] = (TPad*) cNegChannel_Scan_cent->cd(9);
-    padNegChannel_Scan_cent[8]->SetRightMargin(0.02);
-    hPXnHADchan_cent[3]->Draw();
-    txZDCnchan[8]->AddText("ZDC- HAD4");
-    txZDCnchan[8]->Draw();
-    padNegChannel_Scan_cent[9] = (TPad*) cNegChannel_Scan_cent->cd(10);
-    padNegChannel_Scan_cent[9]->SetTopMargin(0.2);
-    if (print_plots) cNegChannel_Scan_cent->Print("NegChannel_Scan_cent.pdf","pdf");
-    if (close_plots) cNegChannel_Scan_cent->Close();
-    
-    
-    TCanvas * cNegChannel_Scan_cent_Nsub = new TCanvas("cNegChannel_Scan_cent_Nsub","cNegChannel_Scan_cent_Nsub",1250,550);
-    cNegChannel_Scan_cent_Nsub->Divide(5,2,0,0);
-    TPad * padNegChannel_Scan_cent_Nsub[10];
-    for (int EMchan = 1; EMchan<=numEMchan; EMchan++) {
-        padNegChannel_Scan_cent_Nsub[EMchan-1] = (TPad*) cNegChannel_Scan_cent_Nsub->cd(EMchan);
-        padNegChannel_Scan_cent_Nsub[EMchan-1]->SetTopMargin(0.05);
-        hPXnEMchan_cent_Nsub[EMchan-1]->Draw();
-        txZDCnchan[EMchan-1]->Draw();
-    }
-    hPXnEMchan_cent_Nsub[0]->GetYaxis()->SetTitleOffset(1.35);
-    hPXnEMchan_cent_Nsub[0]->GetYaxis()->SetTitleSize(0.07);
-    hPXnEMchan_cent_Nsub[0]->GetYaxis()->SetLabelSize(0.06);
-    padNegChannel_Scan_cent_Nsub[4]->SetRightMargin(0.01);
-    padNegChannel_Scan_cent_Nsub[4]->SetBottomMargin(0.01);
-    padNegChannel_Scan_cent_Nsub[5] = (TPad*) cNegChannel_Scan_cent_Nsub->cd(6);
-    hPXnHADchan_cent_Nsub[0]->Draw();
-    txZDCnchan[5]->Draw();
-    padNegChannel_Scan_cent_Nsub[6] = (TPad*) cNegChannel_Scan_cent_Nsub->cd(7);
-    hPXnHADchan_cent_Nsub[1]->Draw();
-    txZDCnchan[6]->Draw();
-    padNegChannel_Scan_cent_Nsub[7] = (TPad*) cNegChannel_Scan_cent_Nsub->cd(8);
-    hPXnHADchan_cent_Nsub[2]->Draw();
-    txZDCnchan[7]->Draw();
-    padNegChannel_Scan_cent_Nsub[8] = (TPad*) cNegChannel_Scan_cent_Nsub->cd(9);
-    padNegChannel_Scan_cent_Nsub[8]->SetRightMargin(0.02);
-    hPXnHADchan_cent_Nsub[3]->Draw();
-    txZDCnchan[8]->Draw();
-    padNegChannel_Scan_cent_Nsub[9] = (TPad*) cNegChannel_Scan_cent_Nsub->cd(10);
-    padNegChannel_Scan_cent_Nsub[9]->SetTopMargin(0.2);
-    if (print_plots) cNegChannel_Scan_cent_Nsub->Print("NegChannel_Scan_cent_Nsub.pdf","pdf");
-    if (close_plots) cNegChannel_Scan_cent_Nsub->Close();
-    
-    
-    TCanvas * cNegChannel_Scan_noff = new TCanvas("cNegChannel_Scan_noff","cNegChannel_Scan_noff",1250,550);
-    cNegChannel_Scan_noff->Divide(5,2,0,0);
-    TPad * padNegChannel_Scan_noff[10];
-    for (int EMchan = 1; EMchan<=numEMchan; EMchan++) {
-        padNegChannel_Scan_noff[EMchan-1] = (TPad*) cNegChannel_Scan_noff->cd(EMchan);
-        padNegChannel_Scan_noff[EMchan-1]->SetTopMargin(0.05);
-        hPXnEMchan_noff[EMchan-1]->Draw();
-        txZDCnchan[EMchan-1]->Draw();
-    }
-    hPXnEMchan_noff[0]->GetYaxis()->SetTitleOffset(1.35);
-    hPXnEMchan_noff[0]->GetYaxis()->SetTitleSize(0.07);
-    hPXnEMchan_noff[0]->GetYaxis()->SetLabelSize(0.06);
-    padNegChannel_Scan_noff[4]->SetRightMargin(0.01);
-    padNegChannel_Scan_noff[4]->SetBottomMargin(0.01);
-    padNegChannel_Scan_noff[5] = (TPad*) cNegChannel_Scan_noff->cd(6);
-    hPXnHADchan_noff[0]->Draw();
-    txZDCnchan[5]->Draw();
-    padNegChannel_Scan_noff[6] = (TPad*) cNegChannel_Scan_noff->cd(7);
-    hPXnHADchan_noff[1]->Draw();
-    txZDCnchan[6]->Draw();
-    padNegChannel_Scan_noff[7] = (TPad*) cNegChannel_Scan_noff->cd(8);
-    hPXnHADchan_noff[2]->Draw();
-    txZDCnchan[7]->Draw();
-    padNegChannel_Scan_noff[8] = (TPad*) cNegChannel_Scan_noff->cd(9);
-    padNegChannel_Scan_noff[8]->SetRightMargin(0.02);
-    hPXnHADchan_noff[3]->Draw();
-    txZDCnchan[8]->Draw();
-    padNegChannel_Scan_noff[9] = (TPad*) cNegChannel_Scan_noff->cd(10);
-    padNegChannel_Scan_noff[9]->SetTopMargin(0.2);
-    if (print_plots) cNegChannel_Scan_noff->Print("NegChannel_Scan_noff.pdf","pdf");
-    if (close_plots) cNegChannel_Scan_noff->Close();
-    
-    TCanvas * cNegChannel_Scan_noff_Nsub = new TCanvas("cNegChannel_Scan_noff_Nsub","cNegChannel_Scan_noff_Nsub",1250,550);
-    cNegChannel_Scan_noff_Nsub->Divide(5,2,0,0);
-    TPad * padNegChannel_Scan_noff_Nsub[10];
-    for (int EMchan = 1; EMchan<=numEMchan; EMchan++) {
-        padNegChannel_Scan_noff_Nsub[EMchan-1] = (TPad*) cNegChannel_Scan_noff_Nsub->cd(EMchan);
-        padNegChannel_Scan_noff_Nsub[EMchan-1]->SetTopMargin(0.05);
-        hPXnEMchan_noff_Nsub[EMchan-1]->Draw();
-        txZDCnchan[EMchan-1]->Draw();
-    }
-    hPXnEMchan_noff_Nsub[0]->GetYaxis()->SetTitleOffset(1.35);
-    hPXnEMchan_noff_Nsub[0]->GetYaxis()->SetTitleSize(0.07);
-    hPXnEMchan_noff_Nsub[0]->GetYaxis()->SetLabelSize(0.06);
-    padNegChannel_Scan_noff_Nsub[4]->SetRightMargin(0.01);
-    padNegChannel_Scan_noff_Nsub[4]->SetBottomMargin(0.01);
-    padNegChannel_Scan_noff_Nsub[5] = (TPad*) cNegChannel_Scan_noff_Nsub->cd(6);
-    hPXnHADchan_noff_Nsub[0]->Draw();
-    txZDCnchan[5]->Draw();
-    padNegChannel_Scan_noff_Nsub[6] = (TPad*) cNegChannel_Scan_noff_Nsub->cd(7);
-    hPXnHADchan_noff_Nsub[1]->Draw();
-    txZDCnchan[6]->Draw();
-    padNegChannel_Scan_noff_Nsub[7] = (TPad*) cNegChannel_Scan_noff_Nsub->cd(8);
-    hPXnHADchan_noff_Nsub[2]->Draw();
-    txZDCnchan[7]->Draw();
-    padNegChannel_Scan_noff_Nsub[8] = (TPad*) cNegChannel_Scan_noff_Nsub->cd(9);
-    padNegChannel_Scan_noff_Nsub[8]->SetRightMargin(0.02);
-    hPXnHADchan_noff_Nsub[3]->Draw();
-    txZDCnchan[8]->Draw();
-    padNegChannel_Scan_noff_Nsub[9] = (TPad*) cNegChannel_Scan_noff->cd(10);
-    padNegChannel_Scan_noff_Nsub[9]->SetTopMargin(0.2);
-    if (print_plots) cNegChannel_Scan_noff_Nsub->Print("NegChannel_Scan_noff_Nsub.pdf","pdf");
-    if (close_plots) cNegChannel_Scan_noff_Nsub->Close();
-
-    
+ 
+//    tfout->Close();
 }
+
