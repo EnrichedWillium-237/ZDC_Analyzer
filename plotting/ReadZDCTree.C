@@ -27,15 +27,16 @@ static const int TSnoiseMin = 7;
 static const int TSnoiseMax = 7;
 
 // gain adjustment of individual channels
-static const float gainEMp[numEMchan] = {1., 1., 1., 1., 1.};
-static const float gainHADp[numHADchan] = {1., 1., 1., 1.};
-static const float gainEMn[numEMchan] = {1., 1., 1., 1., 1.};
-static const float gainHADn[numHADchan] = {1., 1., 1., 1.};
-
+// default gains
 //static const float gainEMp[numEMchan] = {1., 1., 1., 1., 1.};
-//static const float gainHADp[numHADchan] = {1., 5.31, 4.14, 1.};
-//static const float gainEMn[numEMchan] = {0.6, 0.8, 1.75, 0.9, 2.};
-//static const float gainHADn[numHADchan] = {0.31, 5.0, 5.1, 3.1};
+//static const float gainHADp[numHADchan] = {1., 1., 1., 1.};
+//static const float gainEMn[numEMchan] = {1., 1., 1., 1., 1.};
+//static const float gainHADn[numHADchan] = {1., 1., 1., 1.};
+// intercalibrated ZDC+ and ZDC-
+static const float gainEMp[numEMchan] = {1., 1., 1., 1., 1.};
+static const float gainHADp[numHADchan] = {1., 5.31, 4.14, 1.};
+static const float gainEMn[numEMchan] = {0.6, 0.8, 1.75, 0.9, 2.};
+static const float gainHADn[numHADchan] = {0.31, 5.0, 5.1, 3.1};
 
 TFile * fin;
 TFile * tfout;
